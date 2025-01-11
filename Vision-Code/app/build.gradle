@@ -7,12 +7,14 @@
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
+    id 'java'
     id 'application'
 }
 
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    maven { url 'https://frcmaven.wpi.edu/release' }
 }
 
 dependencies {
@@ -23,6 +25,18 @@ dependencies {
 
     // This dependency is used by the application.
     implementation libs.guava
+
+    // FRC Dependecies based on https://github.com/wpilibsuite/WPILibPi/blob/42f5fcd70277c24f7910ead7a8b3d28d6d98bbf9/deps/examples/java-multiCameraServer/build.gradle
+    implementation 'edu.wpi.first.apriltag:apriltag-java:2025.2.1'
+    implementation 'edu.wpi.first.wpimath:wpimath-java:2025.2.1'
+    implementation 'edu.wpi.first.wpinet:wpinet-java:2025.2.1'
+    implementation 'edu.wpi.first.wpiutil:wpiutil-java:2025.2.1'
+    implementation 'edu.wpi.first.ntcore:ntcore-java:2025.2.1'
+    implementation 'edu.wpi.first.cscore:cscore-java:2025.2.1'
+    implementation 'edu.wpi.first.cameraserver:cameraserver-java:2025.2.1'
+    implementation 'edu.wpi.first.thirdparty.frc2025.opencv:opencv-java:4.10.0-3'
+    implementation 'edu.wpi.first.wpilibj:wpilibj-java:2025.2.1'
+    implementation 'edu.wpi.first.hal:hal-java:2025.2.1'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
