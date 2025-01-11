@@ -72,6 +72,9 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    //dependency for Middleware-Code
+    implementation fileTree(dir: '../../Middleware-Code/build/libs', include: 'middleware-code-*.jar')
 }
 
 test {

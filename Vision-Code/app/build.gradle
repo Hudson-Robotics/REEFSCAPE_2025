@@ -37,6 +37,9 @@ dependencies {
     implementation 'edu.wpi.first.thirdparty.frc2025.opencv:opencv-java:4.10.0-3'
     implementation 'edu.wpi.first.wpilibj:wpilibj-java:2025.2.1'
     implementation 'edu.wpi.first.hal:hal-java:2025.2.1'
+
+    // Middleware-Code Dependency
+    implementation fileTree(dir: '../../Middleware-Code/build/libs', include: 'middleware-code-*.jar')
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
