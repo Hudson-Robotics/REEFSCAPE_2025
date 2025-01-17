@@ -7,14 +7,18 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
+<<<<<<< HEAD
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.XboxController;
+=======
+>>>>>>> 4aa3ebb (1/17/25)
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Interfaces.drivetrain;
 
+<<<<<<< HEAD
 import frc.robot.HelperClasses.NeoSwerve;
 
 import com.studica.frc.AHRS;
@@ -87,6 +91,29 @@ public class swervedrive extends SubsystemBase  implements drivetrain {
   *
   * @return a command
   */
+=======
+public class swervedrive extends SubsystemBase  implements drivetrain {
+    final SparkMax FrontleftCanSparksidways;
+    final SparkMax FrontleftCanSparkforwordMax;
+    final SparkMax frontrightCanSparkforwordMax;
+  final SparkMax frontrightCanSparksidways;
+  final SparkMax backrightCanSparkMaxBackwards;
+  SparkMax BackrightCanSparkMaxBackwards;
+    public swervedrive() {
+      frontrightCanSparksidways = new SparkMax(5, MotorType.kBrushless);
+      frontrightCanSparkforwordMax = new SparkMax(1, MotorType.kBrushless);
+    //public swervedrive() {
+      FrontleftCanSparksidways = new SparkMax(6, MotorType.kBrushless);
+      FrontleftCanSparkforwordMax = new SparkMax(8, MotorType.kBrushless);
+      backrightCanSparkMaxBackwards= new SparkMax (2, MotorType.kBrushless);
+      //BackrightCanSparkMaxBackwards= new SparkMax (4, MotorType.kBrushless);
+  }
+  /**
+   * Example command factory method.
+   *
+   * @return a command
+   */
+>>>>>>> 4aa3ebb (1/17/25)
   public Command exampleMethodCommand() {
     // Inline construction of command goes here.
     // Subsystem::RunOnce implicitly requires `this` subsystem.
@@ -95,16 +122,25 @@ public class swervedrive extends SubsystemBase  implements drivetrain {
           /* one-time action goes here */
         });
   }
+<<<<<<< HEAD
 
   /**
   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
   *
   * @return value of some boolean subsystem state, such as a digital sensor.
   */
+=======
+  /**
+   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
+   *
+   * @return value of some boolean subsystem state, such as a digital sensor.
+   */
+>>>>>>> 4aa3ebb (1/17/25)
   public boolean exampleCondition() {
     // Query some boolean state, such as a digital sensor.
     return false;
   }
+<<<<<<< HEAD
    
   @Override
   public void periodic() {
@@ -159,6 +195,21 @@ public class swervedrive extends SubsystemBase  implements drivetrain {
     // BackleftCanSparkmaxwards3.set(.2);
     // BackleftCanSparkmaxwards7.set(.05);
 }
+=======
+
+  @Override
+  public void periodic() {
+   SmartDashboard.putNumber("Frontright", .2); 
+    frontrightCanSparksidways.set(.2);   
+    frontrightCanSparkforwordMax.set(.2);
+     SmartDashboard.putNumber("Frontleft", .2); 
+   FrontleftCanSparksidways.set(.2);  
+    FrontleftCanSparksidways.set(.2);
+     SmartDashboard.putNumber("BackRight", .2); 
+   BackrightCanSparkMaxBackwards.set(.2);  
+    BackrightCanSparkMaxBackwards.set(.2);
+  }
+>>>>>>> 4aa3ebb (1/17/25)
   
 
   @Override
@@ -166,10 +217,18 @@ public class swervedrive extends SubsystemBase  implements drivetrain {
     // This method will be called once per scheduler run during simulation
   }
 
+<<<<<<< HEAD
   @Override
   public void drive(final double xspeed, final double yspeed, final double rotation) {
       // TODO Auto-generated method stub
       throw new UnsupportedOperationException("Unimplemented method 'drive go'");
     }
+=======
+@Override
+public void drive(final double xspeed, final double yspeed, final double rotation) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'drive go'");
+  }
+>>>>>>> 4aa3ebb (1/17/25)
 }
 
