@@ -93,20 +93,24 @@ public class swervedrive extends SubsystemBase  implements drivetrain {
   */
 =======
 public class swervedrive extends SubsystemBase  implements drivetrain {
-    final SparkMax FrontleftCanSparksidways;
-    final SparkMax FrontleftCanSparkforwordMax;
-    final SparkMax frontrightCanSparkforwordMax;
-  final SparkMax frontrightCanSparksidways;
-  final SparkMax backrightCanSparkMaxBackwards;
-  SparkMax BackrightCanSparkMaxBackwards;
+    final SparkMax FrontleftCanSparksidways6;
+   // final SparkMax FrontleftCanSparkforwordMax8;
+    final SparkMax frontrightCanSparkforwordMax1;
+ // final SparkMax frontrightCanSparksidways5;
+  final SparkMax backrightCanSparkMaxBackwards4;
+ //final SparkMax BackrightCanSparkMaxBackwards2;
+ final SparkMax BackleftCanSparkmaxwards7;
+ //final SparkMax BackleftCanSparkmaxwards3;
     public swervedrive() {
-      frontrightCanSparksidways = new SparkMax(5, MotorType.kBrushless);
-      frontrightCanSparkforwordMax = new SparkMax(1, MotorType.kBrushless);
+      //frontrightCanSparksidways5 = new SparkMax(5, MotorType.kBrushless);
+      frontrightCanSparkforwordMax1 = new SparkMax(1, MotorType.kBrushless);
     //public swervedrive() {
-      FrontleftCanSparksidways = new SparkMax(6, MotorType.kBrushless);
-      FrontleftCanSparkforwordMax = new SparkMax(8, MotorType.kBrushless);
-      backrightCanSparkMaxBackwards= new SparkMax (2, MotorType.kBrushless);
-      //BackrightCanSparkMaxBackwards= new SparkMax (4, MotorType.kBrushless);
+      FrontleftCanSparksidways6 = new SparkMax(6, MotorType.kBrushless);
+     // FrontleftCanSparkforwordMax8 = new SparkMax(8, MotorType.kBrushless);
+      backrightCanSparkMaxBackwards4= new SparkMax (4, MotorType.kBrushless);
+    //BackrightCanSparkMaxBackwards2= new SparkMax (4, MotorType.kBrushless);
+    BackleftCanSparkmaxwards7= new SparkMax (7, MotorType.kBrushless);
+    //BackleftCanSparkmaxwards3= new SparkMax (3, MotorType.kBrushless);
   }
   /**
    * Example command factory method.
@@ -199,15 +203,18 @@ public class swervedrive extends SubsystemBase  implements drivetrain {
 
   @Override
   public void periodic() {
-   SmartDashboard.putNumber("Frontright", .2); 
-    frontrightCanSparksidways.set(.2);   
-    frontrightCanSparkforwordMax.set(.2);
-     SmartDashboard.putNumber("Frontleft", .2); 
-   FrontleftCanSparksidways.set(.2);  
-    FrontleftCanSparksidways.set(.2);
-     SmartDashboard.putNumber("BackRight", .2); 
-   BackrightCanSparkMaxBackwards.set(.2);  
-    BackrightCanSparkMaxBackwards.set(.2);
+   SmartDashboard.putNumber("Frontright", .05); 
+    //frontrightCanSparksidways5.set(.5);   
+    frontrightCanSparkforwordMax1.set(.05);
+     SmartDashboard.putNumber("Frontleft", .5); 
+   FrontleftCanSparksidways6.set(.05);  
+  // FrontleftCanSparkforwordMax8.set(.2);
+     SmartDashboard.putNumber("BackRight", .5); 
+  // BackrightCanSparkMaxBackwards2.set(.2);  
+    backrightCanSparkMaxBackwards4.set(.05);
+    SmartDashboard.putNumber("backleft", .5);
+   // BackleftCanSparkmaxwards3.set(.2);
+    BackleftCanSparkmaxwards7.set(.05);
   }
 >>>>>>> 4aa3ebb (1/17/25)
   
