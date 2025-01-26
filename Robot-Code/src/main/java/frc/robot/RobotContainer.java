@@ -36,6 +36,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
     camera = new SecurityCam();
+    camera = new SecurityCam();
   }
 
   /**
