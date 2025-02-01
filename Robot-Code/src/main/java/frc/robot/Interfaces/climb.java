@@ -4,7 +4,7 @@ import java.util.function.DoubleSupplier;
 
 public interface climb {
 
-void climb(Double speed);
+void Climb(Double speed);
 
 
     

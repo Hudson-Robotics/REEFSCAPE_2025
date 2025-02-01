@@ -127,37 +127,6 @@ public class swervedrive extends SubsystemBase  implements drivetrain {
     this.frontRightSwerveModule.setDesiredState(swerveModuleStates[1]);
     this.backLeftSwerveModule.setDesiredState(swerveModuleStates[2]);
     this.backRightSwerveModule.setDesiredState(swerveModuleStates[3]);
-
-    // double driveMotorSpeed = leftY;
-    // frontrightCanSparkforwordMax1.set(driveMotorSpeed);
-    // SmartDashboard.putNumber("Drive Motor Speed", driveMotorSpeed);
-    // double steerMotorSpeed = rightX;
-    // frontrightCanSparksidways5.set(steerMotorSpeed);
-    // SmartDashboard.putNumber("Steer Motor Speed", steerMotorSpeed);
-    // // backrightCanSparkMaxBackwards4= new SparkMax (4, MotorType.kBrushless);
-
-    // BackrightCanSparkMaxBackwards2.set(steerMotorSpeed);
-    // SmartDashboard.putNumber("Steer Motor Speed", steerMotorSpeed);
-
-    // FrontleftCanSparkforwordMax8.set(steerMotorSpeed);
-    // SmartDashboard.putNumber("Steer Motor Speed", steerMotorSpeed);
-    // FrontleftCanSparkforwordMax8.set(steerMotorSpeed);
-    // SmartDashboard.putNumber("Steer Motor Speed", steerMotorSpeed);
-    // FrontleftCanSparksidways6.set(steerMotorSpeed);
-    // SmartDashboard.putNumber("Steer Motor Speed", steerMotorSpeed);
-    // //speed for sparkmaxs:)
-    // SmartDashboard.putNumber("Frontright", .05); 
-    // frontrightCanSparksidways5.set(.5);   
-    // frontrightCanSparkforwordMax1.set(.05);
-    // SmartDashboard.putNumber("Frontleft", .5); 
-    // FrontleftCanSparksidways6.set(.05);  
-    // FrontleftCanSparkforwordMax8.set(.2);
-    // SmartDashboard.putNumber("BackRight", .5); 
-    // BackrightCanSparkMaxBackwards2.set(.2);  
-    // backrightCanSparkMaxBackwards4.set(.05);
-    // SmartDashboard.putNumber("backleft", .5);
-    // BackleftCanSparkmaxwards3.set(.2);
-    // BackleftCanSparkmaxwards7.set(.05);
 }
   
 

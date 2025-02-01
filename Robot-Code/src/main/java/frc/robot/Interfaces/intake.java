@@ -3,8 +3,8 @@ package frc.robot.Interfaces;
 import java.util.function.DoubleSupplier;
 
 public interface intake {
-   void intake (double speed);
-   void outtake (Double speed);
+   void Intake (double speed);
+   void outtake (double speed);
   boolean hasCoral();
   
 }
