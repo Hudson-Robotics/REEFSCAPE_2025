@@ -11,9 +11,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Interfaces.drivetrain;
+import frc.robot.Interfaces.DriveTrain;
 
-public class swervedrive extends SubsystemBase  implements drivetrain {
+public class SwerveDrive extends SubsystemBase  implements DriveTrain {
   //xbox
   private XboxController controller; 
    //sparkmax
@@ -25,7 +25,7 @@ public class swervedrive extends SubsystemBase  implements drivetrain {
    final SparkMax BackrightCanSparkMaxBackwards2;
    final SparkMax BackleftCanSparkmaxwards7;
    final SparkMax BackleftCanSparkmaxwards3;
-       public swervedrive() { 
+       public SwerveDrive() { 
          controller = new XboxController(1);
    
          frontrightCanSparksidways5 = new SparkMax(5, MotorType.kBrushless);
