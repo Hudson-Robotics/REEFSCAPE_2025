@@ -1,6 +1,6 @@
 package frc.robot.Interfaces;
 
-public interface Elevator {
+public interface interElevator {
     void raise();
     void drop();
     void stop();
