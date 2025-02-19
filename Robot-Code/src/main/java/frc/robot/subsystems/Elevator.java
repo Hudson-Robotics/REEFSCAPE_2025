@@ -12,9 +12,9 @@ public class Elevator extends SubsystemBase implements interElevator{
      //sparkmax & xbox controller
      final SparkMax eleMotor1;
   final SparkMax eleMotor2;   
- private XboxController controller;
-
- public Elevator(XboxController controller) {
+private XboxController controller; 
+public Elevator(XboxController controller) {
+     controller = new XboxController(2);
      this.controller = controller;
      eleMotor1 = new SparkMax(SparkMaxIDs.ELEVATOR_MOTOR_ONE, MotorType.kBrushed);
      eleMotor2 = new SparkMax(SparkMaxIDs.ELEVATOR_MOTOR_TWO, MotorType.kBrushed);

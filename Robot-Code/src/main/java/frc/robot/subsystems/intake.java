@@ -14,7 +14,7 @@ public class intake extends SubsystemBase implements Intake {
 
   private XboxController controller; 
  public intake() { 
-    controller = new XboxController(1);
+    controller = new XboxController(2);
     intakeMotor1 = new SparkMax(SparkMaxIDs.INTAKE_MOTOR_ONE, MotorType.kBrushed);
     intakeMotor2 = new SparkMax(SparkMaxIDs.INTAKE_MOTOR_TWO, MotorType.kBrushed); 
  }
@@ -24,10 +24,16 @@ public class intake extends SubsystemBase implements Intake {
       // Get the state of the A button (boolean)
      boolean xButtonPressed = controller.getAButton();
       SmartDashboard.putBoolean("X Button Pressed", xButtonPressed); 
-      SmartDashboard.putNumber("upMotor1", 1); 
-      intakeMotor1.set(1); 
-      SmartDashboard.putNumber("upMotor2", 1); 
-      intakeMotor2.set(1);   
+      SmartDashboard.putNumber("intakeMotor", .05); 
+      intakeMotor1.set(.05); 
+      SmartDashboard.putNumber("IntakeMotor", .05); 
+      intakeMotor2.set(.05); 
+      boolean bButtonPressed = controller.getAButton();
+      SmartDashboard.putBoolean("B Button Pressed", bButtonPressed); 
+      SmartDashboard.putNumber("outtakeMotor", -.05); 
+      intakeMotor1.set(-.05); 
+      SmartDashboard.putNumber("OuttakeMotor", -.05); 
+      intakeMotor2.set(-.05);  
      }
 
     @Override

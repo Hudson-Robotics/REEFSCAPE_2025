@@ -16,7 +16,7 @@ public class Climber extends SubsystemBase implements Climb  {
 
  private XboxController controller; 
  public Climber() { 
-    controller = new XboxController(1);
+    controller = new XboxController(2);
     upMotor1 = new SparkMax(SparkMaxIDs.UP_MOTOR_CLIMB_ONE, MotorType.kBrushed);
     UpMotor2 = new SparkMax(SparkMaxIDs.UP_MOTOR_CLIMB_TWO, MotorType.kBrushed);
 }

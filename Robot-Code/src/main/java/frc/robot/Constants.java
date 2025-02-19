@@ -35,5 +35,6 @@ public final class Constants {
 
     public static final int ELEVATOR_MOTOR_ONE = 13;
     public static final int ELEVATOR_MOTOR_TWO = 14;
+    public static final int SWIVEL_MOTOR_UP = 15;
 }
 }
