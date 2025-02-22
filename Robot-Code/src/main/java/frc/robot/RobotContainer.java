@@ -24,7 +24,7 @@ import frc.robot.subsystems.SwerveDrive;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final SecurityCam camera;
+  //private final SecurityCam camera;
  private final SwerveDrive drivetrain = new SwerveDrive();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -35,7 +35,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    camera = new SecurityCam();
+    //camera = new SecurityCam();
   }
 
   /**

@@ -1,42 +1,50 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+//no sue plz :D
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import static edu.wpi.first.units.Units.Newton;
+
+import java.util.Random;
+
+import javax.xml.xpath.XPathVariableResolver;
+
 import com.revrobotics.spark.SparkMax;
 
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.Kinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.SparkMaxIDs;
 import frc.robot.Interfaces.DriveTrain;
 
 public class SwerveDrive extends SubsystemBase  implements DriveTrain {
   //xbox
   private XboxController controller; 
-   //sparkmax
-    final SparkMax frontrightCanSparkforwordMax1;
- final SparkMax frontrightCanSparksidways5;
-  final SparkMax FrontleftCanSparksidways6;
-   final SparkMax FrontleftCanSparkforwordMax8;
-   SparkMax backrightCanSparkMaxBackwards4;
-   final SparkMax BackrightCanSparkMaxBackwards2;
-   final SparkMax BackleftCanSparkmaxwards7;
-   final SparkMax BackleftCanSparkmaxwards3;
-       public SwerveDrive() { 
+  SwerveModule frontLeftModule = new SwerveModule(SparkMaxIDs.FRONT_LEFT_DRIVE, SparkMaxIDs.FRONT_LEFT_STEER);
+  SwerveModule frontRightModule = new SwerveModule (SparkMaxIDs.FRONT_RIGHT_DRIVE, SparkMaxIDs. FRONT_RIGHT_STEER);
+  SwerveModule backLeftModule = new SwerveModule(SparkMaxIDs.BACK_LEFT_DRIVE, SparkMaxIDs. BACK_LEFT_STEER);
+  SwerveModule backRightModule = new SwerveModule(SparkMaxIDs.BACK_RIGHT_DRIVE, SparkMaxIDs.BACK_RIGHT_STEER);
+
+
+    Translation2d frontLeftLocation = new Translation2d(-.381, .381); //.381 is half of .762 m which is 30 inches in freedom units
+    Translation2d frontRightsLocation = new Translation2d(.381, .381); //.381 is half of .762 m which is 30 inches in freedom unitS
+    Translation2d backLeftLocation = new Translation2d(-.381, -.381); //.381 is half of .762 m which is 30 inches in freedom units
+    Translation2d backRightLocation = new Translation2d(.381, -.381); //.381 is half of .762 m which is 30 inches in freedom units
+
+    SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightsLocation, backLeftLocation, backRightLocation);
+
+    public SwerveDrive() { 
          controller = new XboxController(1);
-   
-         frontrightCanSparksidways5 = new SparkMax(5, MotorType.kBrushless);
-         frontrightCanSparkforwordMax1 = new SparkMax(1, MotorType.kBrushless);
-   
-       FrontleftCanSparksidways6 = new SparkMax(6, MotorType.kBrushless);
-       FrontleftCanSparkforwordMax8 = new SparkMax(8, MotorType.kBrushless);
-       backrightCanSparkMaxBackwards4= new SparkMax (4, MotorType.kBrushless);
-       BackrightCanSparkMaxBackwards2= new SparkMax (4, MotorType.kBrushless);
-       BackleftCanSparkmaxwards7= new SparkMax (7, MotorType.kBrushless);
-       BackleftCanSparkmaxwards3= new SparkMax (3, MotorType.kBrushless);
      }
      /**
       * Example command factory method.
@@ -63,45 +71,29 @@ public class SwerveDrive extends SubsystemBase  implements DriveTrain {
    
      @Override
      public void periodic() {
-      // Get the state of the A button (boolean)
-      boolean aButtonPressed = controller.getAButton();
-      SmartDashboard.putBoolean("A Button Pressed", aButtonPressed);
-      double leftY = controller.getLeftY();
-      SmartDashboard.putNumber("Left Joystick Y", leftY);
-      double rightX = controller.getRightX();
-      SmartDashboard.putNumber("Right Joystick X", rightX);
-      
-      double driveMotorSpeed = leftY;
-      frontrightCanSparkforwordMax1.set(driveMotorSpeed);
-      SmartDashboard.putNumber("Drive Motor Speed", driveMotorSpeed);
-      double steerMotorSpeed = rightX;
-      frontrightCanSparksidways5.set(steerMotorSpeed);
-      SmartDashboard.putNumber("Steer Motor Speed", steerMotorSpeed);
-       backrightCanSparkMaxBackwards4= new SparkMax (4, MotorType.kBrushless);
-  
-    BackrightCanSparkMaxBackwards2.set(steerMotorSpeed);
-   SmartDashboard.putNumber("Steer Motor Speed", steerMotorSpeed);
+      double speedX = this.controller.getLeftX();
+      double speedY = this.controller.getLeftY();
+      double rotate = this.controller.getRightY();
+      // maybe add slewrates....
 
-   FrontleftCanSparkforwordMax8.set(steerMotorSpeed);
-   SmartDashboard.putNumber("Steer Motor Speed", steerMotorSpeed);
- FrontleftCanSparkforwordMax8.set(steerMotorSpeed);
-   SmartDashboard.putNumber("Steer Motor Speed", steerMotorSpeed);
-   FrontleftCanSparksidways6.set(steerMotorSpeed);
-   SmartDashboard.putNumber("Steer Motor Speed", steerMotorSpeed);
-   //speed for sparkmaxs:)
-    SmartDashboard.putNumber("Frontright", .05); 
-    frontrightCanSparksidways5.set(.5);   
-    frontrightCanSparkforwordMax1.set(.05);
-  SmartDashboard.putNumber("Frontleft", .5); 
-  FrontleftCanSparksidways6.set(.05);  
-  FrontleftCanSparkforwordMax8.set(.2);
-  SmartDashboard.putNumber("BackRight", .5); 
-  BackrightCanSparkMaxBackwards2.set(.2);  
-  backrightCanSparkMaxBackwards4.set(.05);
-  SmartDashboard.putNumber("backleft", .5);
-   BackleftCanSparkmaxwards3.set(.2);
-  BackleftCanSparkmaxwards7.set(.05);
-  }
+      var SwerveModuleState = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, rotate, new Rotation2d(0)));
+      frontLeftModule.setDesiredState(SwerveModuleState[0]);
+      frontRightModule.setDesiredState(SwerveModuleState[1]);
+      backLeftModule.setDesiredState(SwerveModuleState[2]);
+      backRightModule.setDesiredState(SwerveModuleState[3]);
+
+      SmartDashboard.putString("Front Left", SwerveModuleState[0].toString());
+      SmartDashboard.putString("Front Right", SwerveModuleState[1].toString());
+      SmartDashboard.putString("Back Left", SwerveModuleState[2].toString());
+      SmartDashboard.putString("Back Right", SwerveModuleState[3].toString());
+    }
+     
+
+    
+
+
+      
+      
   
 
   @Override
