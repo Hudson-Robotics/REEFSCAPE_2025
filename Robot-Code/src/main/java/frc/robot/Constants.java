@@ -18,23 +18,27 @@ public final class Constants {
   }
 
   public static class SparkMaxIDs {
-    public static final int FRONT_LEFT_DRIVE = 1;
-    public static final int FRONT_LEFT_STEER = 2;
-    public static final int FRONT_RIGHT_DRIVE = 3;
-    public static final int FRONT_RIGHT_STEER = 4;
-    public static final int BACK_LEFT_DRIVE = 5;
-    public static final int BACK_LEFT_STEER = 6;
-    public static final int BACK_RIGHT_DRIVE = 7;
-    public static final int BACK_RIGHT_STEER = 8;
+    public static final int FRONT_LEFT_DRIVE = 13;
+    public static final int FRONT_LEFT_STEER = 1;
 
-    public static final int UP_MOTOR_CLIMB_ONE = 9;
-    public static final int UP_MOTOR_CLIMB_TWO = 10;
+    public static final int FRONT_RIGHT_DRIVE = 31;
+    public static final int FRONT_RIGHT_STEER = 8;
 
-    public static final int INTAKE_MOTOR_ONE = 11;
-    public static final int INTAKE_MOTOR_TWO = 12;
+    public static final int BACK_LEFT_DRIVE = 9;
+    public static final int BACK_LEFT_STEER = 5;
 
-    public static final int ELEVATOR_MOTOR_ONE = 13;
-    public static final int ELEVATOR_MOTOR_TWO = 14;
-    public static final int SWIVEL_MOTOR_UP = 15;
+    public static final int BACK_RIGHT_DRIVE = 3;
+    public static final int BACK_RIGHT_STEER = 14;
+
+    //public static final int UP_MOTOR_CLIMB_ONE = 9;
+    //public static final int UP_MOTOR_CLIMB_TWO = 10;
+
+    //public static final int INTAKE_MOTOR_ONE = 11;
+    //public static final int INTAKE_MOTOR_TWO = 12;
+
+    public static final int ELEVATOR_MOTOR_ONE = 6;
+    public static final int ELEVATOR_MOTOR_TWO = 11;
+    
+    //public static final int SWIVEL_MOTOR_UP = 15;
 }
 }
