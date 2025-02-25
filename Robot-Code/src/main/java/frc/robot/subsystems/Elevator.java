@@ -1,78 +1,70 @@
 package frc.robot.subsystems;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Interfaces.interElevator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.SparkMaxIDs;
+
+import frc.robot.Interfaces.Motors.Motor;
 
 public class Elevator extends SubsystemBase implements interElevator{
- private static final boolean RBButtonPressed = false;
-     //sparkmax & xbox controller
-     final SparkMax eleMotor1;
-  final SparkMax eleMotor2;   
-private XboxController controller; 
-public Elevator(XboxController controller) {
-     controller = new XboxController(2);
-     this.controller = controller;
-     eleMotor1 = new SparkMax(SparkMaxIDs.ELEVATOR_MOTOR_ONE, MotorType.kBrushed);
-     eleMotor2 = new SparkMax(SparkMaxIDs.ELEVATOR_MOTOR_TWO, MotorType.kBrushed);
- }
 
- @Override
- public void periodic() {
-     // Get the state of the RB button (boolean)
-     boolean RBButtonPressed = controller.getRightBumper(); // Look into xbox controller documentation frc
-     SmartDashboard.putBoolean("RB Button Pressed", RBButtonPressed);
-     //going up+
-     if (RBButtonPressed) {
-         SmartDashboard.putNumber("eleMotor1", .05); 
-         eleMotor1.set(.05); 
-         SmartDashboard.putNumber("eleMotor2", .05); 
-         eleMotor2.set(.05); 
-     }
+    final Motor eleMotor1;
+    final Motor eleMotor2;   
+    private XboxController controller; 
+    
+    public Elevator(XboxController controller, Motor eleMotor1, Motor eleMotor2) {
+        controller = new XboxController(2);
+        this.controller = controller;
 
-     //to go down-
-     boolean LBButtonPressed = controller.getLeftBumper();
-     SmartDashboard.putBoolean("LB Button Pressed", LBButtonPressed);
-     if (LBButtonPressed) {
-         SmartDashboard.putNumber("eleMotor1", -.05); 
-         eleMotor1.set(-.05); 
-         SmartDashboard.putNumber("eleMotor2", -.05); 
-         eleMotor2.set(-.05);
-     }
- }
+        this.eleMotor1 = eleMotor1; //might be more useful to name this as left and right motors
+        this.eleMotor2 = eleMotor2;
+    }
 
- @Override
- public void raise() {
-     // TODO Auto-generated method stub
-     throw new UnsupportedOperationException("Unimplemented method 'raise'");
- }
+    @Override
+    public void periodic() {
+        // Get the state of the RB button (boolean)
+        boolean RBButtonPressed = controller.getRightBumper(); // Look into xbox controller documentation frc
+        SmartDashboard.putBoolean("RB Button Pressed", RBButtonPressed);
+        //going up+
+        if (RBButtonPressed) {
+            this.raise();
+        }
 
- @Override
- public void drop() {
-     // TODO Auto-generated method stub
-     throw new UnsupportedOperationException("Unimplemented method 'drop'");
- }
+        //to go down-
+        boolean LBButtonPressed = controller.getLeftBumper();
+        SmartDashboard.putBoolean("LB Button Pressed", LBButtonPressed);
+        if (LBButtonPressed) {
+            this.drop();
+        }
+    }
 
- @Override
- public void stop() {
-     // TODO Auto-generated method stub
-     throw new UnsupportedOperationException("Unimplemented method 'stop'");
- }
+    //the elevators are mirrored so they might have to be inverted
+    @Override
+    public void raise() {
+        this.setSpeed(.05);
+    }
 
- @Override
- public void setSpeed(double speed) {
-     // TODO Auto-generated method stub
-     throw new UnsupportedOperationException("Unimplemented method 'setSpeed'");
- }
+    @Override
+    public void drop() {
+        this.setSpeed(-.05);
+    }
 
- @Override
- public void setHeight(double height) {
-     // TODO Auto-generated method stub
-     throw new UnsupportedOperationException("Unimplemented method 'setHeight'");
- }
+    @Override
+    public void stop() {
+        this.setSpeed(0);
+    }
+
+    @Override
+    public void setSpeed(double speed) {
+        this.eleMotor1.setSpeed(speed);
+        this.eleMotor2.setSpeed(speed);
+    }
+
+    @Override
+    public void setHeight(double height) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setHeight'");
+    }
 }
 
 
