@@ -3,38 +3,25 @@
 package frc.robot.subsystems;
 
 import frc.robot.subsystems.helper.SwerveModule;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-
-import static edu.wpi.first.units.Units.Newton;
-
-import java.util.Random;
-
-import javax.xml.xpath.XPathVariableResolver;
-
-import com.revrobotics.spark.SparkMax;
-
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.Kinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.SparkMaxIDs;
+
 import frc.robot.Interfaces.DriveTrain;
 
 public class SwerveDrive extends SubsystemBase  implements DriveTrain {
   //xbox
   private XboxController controller; 
-  SwerveModule frontLeftModule = new SwerveModule(SparkMaxIDs.FRONT_LEFT_DRIVE, SparkMaxIDs.FRONT_LEFT_STEER);
-  SwerveModule frontRightModule = new SwerveModule (SparkMaxIDs.FRONT_RIGHT_DRIVE, SparkMaxIDs. FRONT_RIGHT_STEER);
-  SwerveModule backLeftModule = new SwerveModule(SparkMaxIDs.BACK_LEFT_DRIVE, SparkMaxIDs. BACK_LEFT_STEER);
-  SwerveModule backRightModule = new SwerveModule(SparkMaxIDs.BACK_RIGHT_DRIVE, SparkMaxIDs.BACK_RIGHT_STEER);
-
+  SwerveModule frontLeftModule;
+  SwerveModule frontRightModule;
+  SwerveModule backLeftModule;
+  SwerveModule backRightModule;
 
     Translation2d frontLeftLocation = new Translation2d(-.381, .381); //.381 is half of .762 m which is 30 inches in freedom units
     Translation2d frontRightsLocation = new Translation2d(.381, .381); //.381 is half of .762 m which is 30 inches in freedom unitS
@@ -43,8 +30,13 @@ public class SwerveDrive extends SubsystemBase  implements DriveTrain {
 
     SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightsLocation, backLeftLocation, backRightLocation);
 
-    public SwerveDrive() { 
+    public SwerveDrive(SwerveModule flm, SwerveModule frm, SwerveModule blm, SwerveModule brm) { 
          controller = new XboxController(1);
+
+         this.frontLeftModule = flm;
+         this.frontRightModule = frm;
+         this.backLeftModule = blm;
+         this.backRightModule = brm;
      }
      /**
       * Example command factory method.

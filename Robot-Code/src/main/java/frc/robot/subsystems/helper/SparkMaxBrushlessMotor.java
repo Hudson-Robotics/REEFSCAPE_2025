@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Interfaces.Motors.Motor;
 
 public class SparkMaxBrushlessMotor implements Motor{
-    private SparkMax motor;
+    protected SparkMax motor;
     private final String TYPE = "SPARK MAX";
     private int id;
     private String name;
