@@ -2,7 +2,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.swerve.SwerveModule;
+import frc.robot.subsystems.helper.SwerveModule;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import static edu.wpi.first.units.Units.Newton;
