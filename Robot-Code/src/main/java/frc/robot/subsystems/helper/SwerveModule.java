@@ -1,50 +1,42 @@
 package frc.robot.subsystems.helper;
 
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkMaxAlternateEncoder;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.Interfaces.Motors.MotorWithEncoder;
 
 public class SwerveModule  {
     
-    private SparkMax driveMotor;
-    private RelativeEncoder driveEncoder;
+    private MotorWithEncoder driveMotor;
+    private MotorWithEncoder steerMotor;
 
-    private SparkMax steerMotor;
-    private RelativeEncoder steerEncoder;
     private PIDController steerPID;
 
-    public SwerveModule(int driveMotorId, int steerMotorId)
+    public SwerveModule(MotorWithEncoder driveMotor, MotorWithEncoder steerMotor)
     {
-        this.driveMotor = new SparkMax(driveMotorId, MotorType.kBrushless);
-        this.driveEncoder = driveMotor.getEncoder();
+        this.driveMotor = driveMotor;
+        this.steerMotor = steerMotor;
 
-        this.steerMotor = new SparkMax(steerMotorId, MotorType.kBrushless);
-        this.steerEncoder = steerMotor.getAlternateEncoder();
         this.steerPID = new PIDController(.5, 0, 0);
     }
 
     public void setDesiredState(SwerveModuleState desiredState)
     {
         //todo: replace optimize with the proper way of doing it.
-        desiredState = SwerveModuleState.optimize(desiredState, this.getAngle());
+        desiredState.optimize(getAngle());
 
-        driveMotor.set(desiredState.speedMetersPerSecond); // Not sure if this is correct
+        driveMotor.setSpeed(desiredState.speedMetersPerSecond); // Not sure if this is correct // should prob be in voltage
         
-        double turningSpeed = steerPID.calculate(getAngle().getRadians(), desiredState.angle.getRadians());
+        double turningSpeed = steerPID.calculate(this.getAngle().getRadians(), desiredState.angle.getRadians());
         MathUtil.clamp(turningSpeed, -.25, .25); //.25 should be a constants
-        steerMotor.set(turningSpeed);
+        steerMotor.setSpeed(turningSpeed);
     }
 
     public Rotation2d getAngle()
     {
         // THIS IS BIG BAD
         // Creating a new Object every single time it is called
-        return new Rotation2d(steerEncoder.getPosition() * 2 * Math.PI);
+        return new Rotation2d(this.steerMotor.getAngle());
     }
 }
