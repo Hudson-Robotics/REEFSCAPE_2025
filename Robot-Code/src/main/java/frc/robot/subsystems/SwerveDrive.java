@@ -2,7 +2,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.swerve.SwerveModule;
+//import com.ctre.phoenix6.swerve.SwerveModule;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import static edu.wpi.first.units.Units.Newton;
@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SparkMaxIDs;
 import frc.robot.Interfaces.DriveTrain;
+import frc.robot.subsystems.helper.SwerveModule;
 
 public class SwerveDrive extends SubsystemBase  implements DriveTrain {
   //xbox
