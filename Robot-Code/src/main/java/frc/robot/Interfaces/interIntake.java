@@ -1,8 +1,8 @@
 package frc.robot.Interfaces;
 
-public interface Intake {
+public interface interIntake {
     void intake();
     void outtake();
-    void setSpeed();
+    void setSpeed(double speed);
     boolean hasCoral();
 }
