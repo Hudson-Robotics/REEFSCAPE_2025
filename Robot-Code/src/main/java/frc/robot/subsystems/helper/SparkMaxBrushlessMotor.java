@@ -43,5 +43,11 @@ public class SparkMaxBrushlessMotor implements Motor{
     public void printToSmartDashboard() {
         SmartDashboard.putNumber(this.getName(), this.getSpeed());
     }
+
+    @Override
+    public void enableBrake() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'enableBrake'");
+    }
     
 }
