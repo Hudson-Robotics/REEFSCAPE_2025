@@ -18,6 +18,7 @@ import frc.robot.subsystems.helper.SwerveModule;
 import frc.robot.subsystems.helper.TalonFXMotor;
 import frc.robot.subsystems.helper.TalonFXMotorWithEncoder;
 import frc.robot.subsystems.Led;
+import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -88,10 +89,16 @@ public class RobotContainer {
     MotorWithEncoder backLeftSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_LEFT_STEER, "backLeftSteer", true, 360);
     SwerveModule backLeft = new SwerveModule(backLeftDrive, backLeftSteer);
 
-    MotorWithEncoder backRightDrive = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_DRIVE, "backRightDrive", false, 1);
-    MotorWithEncoder backRightSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_STEER, "backRightSteer", true, 360);
+    MotorWithEncoder backRightDrive = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_RIGHT_DRIVE, "backRightDrive", false, 1);
+    MotorWithEncoder backRightSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_RIGHT_STEER, "backRightSteer", true, 360);
     SwerveModule backRight = new SwerveModule(backRightDrive, backRightSteer);
 
     return new SwerveDrive(frontLeft, frontRight, backLeft, backRight);
+  }
+
+  private Intake createIntake() {
+    //Motor motor1 = new TalonFXMotor(0, "motor 1");
+    //Motor motor2 = new TalonFXMotor(0, "motor 2");
+    return null;
   }
 }
