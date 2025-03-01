@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.SparkMaxIDs;
+import frc.robot.Interfaces.Motors.Motor;
 import frc.robot.Interfaces.Motors.MotorWithEncoder;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveStraight;
@@ -19,6 +20,9 @@ import frc.robot.subsystems.helper.TalonFXMotor;
 import frc.robot.subsystems.helper.TalonFXMotorWithEncoder;
 import frc.robot.subsystems.Led;
 import frc.robot.subsystems.Intake;
+
+import javax.naming.InitialContext;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -36,6 +40,7 @@ public class RobotContainer {
  private final SwerveDrive drivetrain = this.createSwerveDrive();
  private final swivelL swivel = new swivelL(new XboxController(0), new TalonFXMotorWithEncoder(12, "Swivel")); // need to move canBusId to constants and remove the xboxController from the swivel class
  private final Led leds = new Led();
+ private final Intake intake = createIntake();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   // private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -97,8 +102,8 @@ public class RobotContainer {
   }
 
   private Intake createIntake() {
-    //Motor motor1 = new TalonFXMotor(0, "motor 1");
-    //Motor motor2 = new TalonFXMotor(0, "motor 2");
-    return null;
+    Motor motor1 = new TalonFXMotor(0, "motor 1");
+    Motor motor2 = new TalonFXMotor(0, "motor 2");
+    return new Intake(motor1, motor2);
   }
 }
