@@ -34,7 +34,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
  private final SwerveDrive drivetrain = this.createSwerveDrive();
- private final swivelL swivel = new swivelL(new XboxController(1), new TalonFXMotorWithEncoder(12, "Swivel")); // need to move canBusId to constants and remove the xboxController from the swivel class
+ private final swivelL swivel = new swivelL(new XboxController(0), new TalonFXMotorWithEncoder(12, "Swivel")); // need to move canBusId to constants and remove the xboxController from the swivel class
  private final Led leds = new Led();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
