@@ -27,8 +27,6 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
  private final SwerveDrive drivetrain = this.createSwerveDrive();
-  //private final SecurityCam camera;
- private final SwerveDrive drivetrain = new SwerveDrive();
  private final Led leds = new Led();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
