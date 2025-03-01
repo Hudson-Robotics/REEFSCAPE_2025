@@ -79,16 +79,12 @@ public class SwerveDrive extends SubsystemBase  implements DriveTrain {
       double rotate = this.controller.getRightY();
       // maybe add slewrates....
 
-      var SwerveModuleState = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speedX, speedY, rotate, new Rotation2d(0)));
-      frontLeftModule.setDesiredState(SwerveModuleState[0]);
-      frontRightModule.setDesiredState(SwerveModuleState[1]);
-      backLeftModule.setDesiredState(SwerveModuleState[2]);
-      backRightModule.setDesiredState(SwerveModuleState[3]);
+      drive(speedX, speedY, rotate);
 
-      SmartDashboard.putString("Front Left", SwerveModuleState[0].toString());
-      SmartDashboard.putString("Front Right", SwerveModuleState[1].toString());
-      SmartDashboard.putString("Back Left", SwerveModuleState[2].toString());
-      SmartDashboard.putString("Back Right", SwerveModuleState[3].toString());
+      // SmartDashboard.putString("Front Left", SwerveModuleState[0].toString());
+      // SmartDashboard.putString("Front Right", SwerveModuleState[1].toString());
+      // SmartDashboard.putString("Back Left", SwerveModuleState[2].toString());
+      // SmartDashboard.putString("Back Right", SwerveModuleState[3].toString());
     }
      
 
@@ -105,9 +101,12 @@ public class SwerveDrive extends SubsystemBase  implements DriveTrain {
   }
 
 @Override
-public void drive(final double xspeed, final double yspeed, final double rotation) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'drive go'");
+public void drive( double xspeed,  double yspeed,  double rotation) {
+  var SwerveModuleState = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xspeed, yspeed, rotation, new Rotation2d(0)));
+  frontLeftModule.setDesiredState(SwerveModuleState[0]);
+  frontRightModule.setDesiredState(SwerveModuleState[1]);
+  backLeftModule.setDesiredState(SwerveModuleState[2]);
+  backRightModule.setDesiredState(SwerveModuleState[3]);
   }
 }
 
