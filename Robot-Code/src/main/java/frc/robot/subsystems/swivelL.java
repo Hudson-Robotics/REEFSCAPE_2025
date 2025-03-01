@@ -14,12 +14,14 @@ public class swivelL extends SubsystemBase implements swivel{
     public swivelL(XboxController controller, Motor  swivelMotor) {
         this.controller = controller;
         this.swivelMotor = swivelMotor;
+        this.swivelMotor.enableBrake();
     }
 
     @Override
     public void periodic() {
         double speedX = this.controller.getLeftX();
         this.swivelMotor.setSpeed(speedX);
+        this.swivelMotor.printToSmartDashboard();
     }
 
     @Override

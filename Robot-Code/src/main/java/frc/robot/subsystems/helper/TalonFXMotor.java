@@ -1,6 +1,7 @@
 package frc.robot.subsystems.helper;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -41,7 +42,14 @@ public class TalonFXMotor implements Motor{
 
     @Override
     public void printToSmartDashboard() {
-        SmartDashboard.putNumber(this.getName(), this.getSpeed());
+        double position = this.motor.getPosition().getValueAsDouble();
+        double angle = 20.7684319834 * position + 12.1284319834;
+        SmartDashboard.putNumber(this.getName(), angle);
+    }
+
+    @Override
+    public void enableBrake() {
+        this.motor.setNeutralMode(NeutralModeValue.Brake);
     }
     
 }

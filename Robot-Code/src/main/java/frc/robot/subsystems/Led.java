@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 public class Led extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  Spark ledLights = new Spark(2);
+  Spark ledLights = new Spark(0);
   public Led() {}
 
   /**
@@ -41,7 +41,7 @@ public class Led extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    ledLights.set(.9);
+    ledLights.set(.5);
   }
 
   @Override

@@ -5,6 +5,8 @@ package frc.robot.subsystems;
 import frc.robot.subsystems.helper.SwerveModule;
 //import com.ctre.phoenix6.swerve.SwerveModule;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
 
 import static edu.wpi.first.units.Units.Newton;
 
@@ -18,6 +20,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,7 +29,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Interfaces.DriveTrain;
 import frc.robot.subsystems.helper.SwerveModule;
 
+import com.studica.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
+
 public class SwerveDrive extends SubsystemBase  implements DriveTrain {
+  
+  
+
   //xbox
   private XboxController controller; 
   SwerveModule frontLeftModule;
@@ -42,7 +51,9 @@ public class SwerveDrive extends SubsystemBase  implements DriveTrain {
     SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightsLocation, backLeftLocation, backRightLocation);
 
     public SwerveDrive(SwerveModule flm, SwerveModule frm, SwerveModule blm, SwerveModule brm) { 
-         controller = new XboxController(1);
+      //AHRS x = new AHRS(SPI.Port.kMXP);
+
+      controller = new XboxController(1);
 
          this.frontLeftModule = flm;
          this.frontRightModule = frm;

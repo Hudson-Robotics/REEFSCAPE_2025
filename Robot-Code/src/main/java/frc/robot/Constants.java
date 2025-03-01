@@ -18,17 +18,17 @@ public final class Constants {
   }
 
   public static class SparkMaxIDs {
-    public static final int FRONT_LEFT_DRIVE = 13;
-    public static final int FRONT_LEFT_STEER = 1;
+    public static final int FRONT_LEFT_DRIVE = 8;
+    public static final int FRONT_LEFT_STEER = 13;
 
     public static final int FRONT_RIGHT_DRIVE = 31;
-    public static final int FRONT_RIGHT_STEER = 8;
+    public static final int FRONT_RIGHT_STEER = 2;
 
     public static final int BACK_LEFT_DRIVE = 9;
     public static final int BACK_LEFT_STEER = 5;
 
-    public static final int BACK_RIGHT_DRIVE = 3;
-    public static final int BACK_RIGHT_STEER = 14;
+    public static final int BACK_RIGHT_DRIVE = 4;
+    public static final int BACK_RIGHT_STEER = 3;
 
     //public static final int UP_MOTOR_CLIMB_ONE = 9;
     //public static final int UP_MOTOR_CLIMB_TWO = 10;

@@ -5,4 +5,5 @@ public interface Motor {
     public double getSpeed();
     public String getName();
     public void printToSmartDashboard();
+    public void enableBrake();
 }
