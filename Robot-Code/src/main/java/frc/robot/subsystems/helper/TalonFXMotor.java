@@ -9,7 +9,7 @@ import frc.robot.Interfaces.Motors.Motor;
 
 public class TalonFXMotor implements Motor{
 
-    private TalonFX motor;
+    protected TalonFX motor;
     private final String TYPE = "TalonFX";
     private int id;
     private String name;
