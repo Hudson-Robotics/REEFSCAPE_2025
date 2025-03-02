@@ -21,7 +21,7 @@ public final class Constants {
     public static final int FRONT_LEFT_DRIVE = 8;
     public static final int FRONT_LEFT_STEER = 13;
 
-    public static final int FRONT_RIGHT_DRIVE = 31;
+    public static final int FRONT_RIGHT_DRIVE = 7;
     public static final int FRONT_RIGHT_STEER = 2;
 
     public static final int BACK_LEFT_DRIVE = 9;

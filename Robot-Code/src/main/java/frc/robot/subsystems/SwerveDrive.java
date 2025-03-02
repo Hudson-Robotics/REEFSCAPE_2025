@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Interfaces.DriveTrain;
 import frc.robot.subsystems.helper.SwerveModule;
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
 
 public class SwerveDrive extends SubsystemBase  implements DriveTrain {
   //xbox
@@ -33,6 +35,8 @@ public class SwerveDrive extends SubsystemBase  implements DriveTrain {
   SwerveModule frontRightModule;
   SwerveModule backLeftModule;
   SwerveModule backRightModule;
+
+  private AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
 
     Translation2d frontLeftLocation = new Translation2d(-.381, .381); //.381 is half of .762 m which is 30 inches in freedom units
     Translation2d frontRightsLocation = new Translation2d(.381, .381); //.381 is half of .762 m which is 30 inches in freedom unitS
@@ -43,7 +47,7 @@ public class SwerveDrive extends SubsystemBase  implements DriveTrain {
 
     public SwerveDrive(SwerveModule flm, SwerveModule frm, SwerveModule blm, SwerveModule brm) { 
          controller = new XboxController(1);
-
+         gyro.reset();
          this.frontLeftModule = flm;
          this.frontRightModule = frm;
          this.backLeftModule = blm;
@@ -81,10 +85,7 @@ public class SwerveDrive extends SubsystemBase  implements DriveTrain {
 
       drive(speedX, speedY, rotate);
 
-      // SmartDashboard.putString("Front Left", SwerveModuleState[0].toString());
-      // SmartDashboard.putString("Front Right", SwerveModuleState[1].toString());
-      // SmartDashboard.putString("Back Left", SwerveModuleState[2].toString());
-      // SmartDashboard.putString("Back Right", SwerveModuleState[3].toString());
+
     }
      
 
@@ -102,11 +103,19 @@ public class SwerveDrive extends SubsystemBase  implements DriveTrain {
 
 @Override
 public void drive( double xspeed,  double yspeed,  double rotation) {
-  var SwerveModuleState = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xspeed, yspeed, rotation, new Rotation2d(0)));
+  var SwerveModuleState = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xspeed, yspeed, rotation ,gyro.getRotation2d()));
+  SmartDashboard.putString("Drive Gyro", gyro.getAngle() + " ");
   frontLeftModule.setDesiredState(SwerveModuleState[0]);
   frontRightModule.setDesiredState(SwerveModuleState[1]);
   backLeftModule.setDesiredState(SwerveModuleState[2]);
   backRightModule.setDesiredState(SwerveModuleState[3]);
+
+        SmartDashboard.putString("Front Left", SwerveModuleState[0].toString());
+      SmartDashboard.putString("Front Right", SwerveModuleState[1].toString());
+      SmartDashboard.putString("Back Left", SwerveModuleState[2].toString());
+      SmartDashboard.putString("Back Right", SwerveModuleState[3].toString());
+
+
   }
 }
 

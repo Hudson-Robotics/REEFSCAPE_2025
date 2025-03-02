@@ -36,9 +36,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
+//Driver 0 = Drive
+//Driver 1 = Manipulators
  private final SwerveDrive drivetrain = this.createSwerveDrive();
- private final swivelL swivel = new swivelL(new XboxController(0), new TalonFXMotorWithEncoder(12, "Swivel")); // need to move canBusId to constants and remove the xboxController from the swivel class
+ //private final swivelL swivel = new swivelL(new XboxController(0), new TalonFXMotorWithEncoder(12, "Swivel")); // need to move canBusId to constants and remove the xboxController from the swivel class
  private final Led leds = new Led();
  private final Intake intake = createIntake();
 
@@ -102,8 +103,8 @@ public class RobotContainer {
   }
 
   private Intake createIntake() {
-    Motor motor1 = new TalonFXMotor(0, "motor 1");
-    Motor motor2 = new TalonFXMotor(0, "motor 2");
+    Motor motor1 = new TalonFXMotor(29, "motor 1");
+    Motor motor2 = new TalonFXMotor(41, "motor 2");
     return new Intake(motor1, motor2);
   }
 }

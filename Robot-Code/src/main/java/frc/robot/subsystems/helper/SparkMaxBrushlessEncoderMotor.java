@@ -2,6 +2,7 @@ package frc.robot.subsystems.helper;
 
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Interfaces.Motors.MotorWithEncoder;
 
 public class SparkMaxBrushlessEncoderMotor extends SparkMaxBrushlessMotor implements MotorWithEncoder{
@@ -45,4 +46,8 @@ public class SparkMaxBrushlessEncoderMotor extends SparkMaxBrushlessMotor implem
         return (this.getAngle() * Math.PI) / 180;
     }
     
+    @Override
+    public void printToSmartDashboard() {
+        SmartDashboard.putString(this.getName(), "Angle " + this.getAngle());
+    }
 }

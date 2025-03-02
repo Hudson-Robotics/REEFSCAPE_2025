@@ -13,7 +13,7 @@ public class Elevator extends SubsystemBase implements interElevator{
     private XboxController controller; 
     
     public Elevator(XboxController controller, Motor eleMotor1, Motor eleMotor2) {
-        controller = new XboxController(2);
+        controller = new XboxController(1);
         this.controller = controller;
 
         this.eleMotor1 = eleMotor1; //might be more useful to name this as left and right motors

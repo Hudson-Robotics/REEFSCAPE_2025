@@ -13,7 +13,7 @@ public class Intake extends SubsystemBase implements interIntake {
 
     private XboxController controller; 
     public Intake(Motor intakeMotor1, Motor intakeMotor2) { 
-        controller = new XboxController(2); // todo: need to extract this
+        controller = new XboxController(0); // todo: need to extract this
         this.intakeMotor1 = intakeMotor1;
         this.intakeMotor2 = intakeMotor2;
     }
