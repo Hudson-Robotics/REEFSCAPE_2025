@@ -14,7 +14,7 @@ public class TalonFXMotor implements Motor{
     private int id;
     private String name;
 
-    public double limit = .1;
+    public double limit = .3;
 
     public TalonFXMotor(int canBusId, String motorName)
     {

@@ -22,16 +22,20 @@ public class Intake extends SubsystemBase implements interIntake {
      public void periodic() {
         // Get the state of the A button (boolean)
         boolean xButtonPressed = controller.getAButton();
-        SmartDashboard.putBoolean("X Button Pressed", xButtonPressed); 
-        if(xButtonPressed){
-            this.intake();
-        }
-
+        SmartDashboard.putBoolean("X Button Pressed", xButtonPressed);
         boolean bButtonPressed = controller.getBButton();
         SmartDashboard.putBoolean("B Button Pressed", bButtonPressed); 
-        if(bButtonPressed) {
+
+        if(xButtonPressed){
+            this.intake();
+        } else if(bButtonPressed) {
             this.outtake();
+        } else {
+            this.setSpeed(0); // we should probably add this to the interface
         }
+
+        this.intakeMotor1.printToSmartDashboard();
+        this.intakeMotor2.printToSmartDashboard();
      }
 
     @Override
