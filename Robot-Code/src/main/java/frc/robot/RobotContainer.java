@@ -10,6 +10,7 @@ import frc.robot.Interfaces.Motors.Motor;
 import frc.robot.Interfaces.Motors.MotorWithEncoder;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveStraight;
+import frc.robot.commands.DriveToAprilTag;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveDrive;
@@ -19,6 +20,7 @@ import frc.robot.subsystems.helper.SwerveModule;
 import frc.robot.subsystems.helper.TalonFXMotor;
 import frc.robot.subsystems.helper.TalonFXMotorWithEncoder;
 import frc.robot.subsystems.Led;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Intake;
 
 import javax.naming.InitialContext;
@@ -42,6 +44,7 @@ public class RobotContainer {
  private final swivelL swivel = new swivelL(new XboxController(0), new TalonFXMotorWithEncoder(12, "Swivel")); // need to move canBusId to constants and remove the xboxController from the swivel class
  private final Led leds = new Led();
  private final Intake intake = createIntake();
+ private final Limelight limelight = new Limelight();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   // private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -79,7 +82,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new DriveStraight(drivetrain);
+    return new DriveToAprilTag(drivetrain, limelight);
   }
 
   private SwerveDrive createSwerveDrive() {
