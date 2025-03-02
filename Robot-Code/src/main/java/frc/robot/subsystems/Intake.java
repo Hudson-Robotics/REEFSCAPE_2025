@@ -40,11 +40,11 @@ public class Intake extends SubsystemBase implements interIntake {
 
     @Override
     public void intake() {
-        this.setSpeed(.25);
+        this.setSpeed(.1);
     }
     @Override
     public void outtake() {
-        this.setSpeed(-.25);
+        this.setSpeed(-.1);
     }
     @Override
     public void setSpeed(double speed) {

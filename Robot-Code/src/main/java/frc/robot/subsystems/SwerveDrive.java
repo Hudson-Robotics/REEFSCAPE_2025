@@ -80,7 +80,7 @@ public class SwerveDrive extends SubsystemBase  implements DriveTrain {
      public void periodic() {
       double speedX = this.controller.getLeftX();
       double speedY = this.controller.getLeftY();
-      double rotate = this.controller.getRightTriggerAxis(); //double rotate = this.controller.getRightY(); // this is for the Afterglow
+      double rotate = this.controller.getRightY(); //double rotate = this.controller.getRightY(); // this is for the Afterglow
 
       double threshold = .04;
       speedX = Math.abs(speedX) < threshold ? 0.0 : speedX;
