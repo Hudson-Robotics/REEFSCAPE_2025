@@ -81,6 +81,12 @@ public class SwerveDrive extends SubsystemBase  implements DriveTrain {
       double speedX = this.controller.getLeftX();
       double speedY = this.controller.getLeftY();
       double rotate = this.controller.getRightTriggerAxis(); //double rotate = this.controller.getRightY(); // this is for the Afterglow
+
+      double threshold = .04;
+      speedX = Math.abs(speedX) < threshold ? 0.0 : speedX;
+      speedY = Math.abs(speedY) < threshold ? 0.0 : speedY;
+      rotate = Math.abs(rotate) < threshold ? 0.0 : rotate;
+
       // maybe add slewrates....
 
       drive(speedX, speedY, rotate);
@@ -103,11 +109,6 @@ public class SwerveDrive extends SubsystemBase  implements DriveTrain {
 
 @Override
 public void drive( double xSpeed,  double ySpeed,  double rotation) {
-  double threshold = .04;
-  xSpeed = Math.abs(xSpeed) < threshold ? 0.0 : xSpeed;
-  ySpeed = Math.abs(ySpeed) < threshold ? 0.0 : ySpeed;
-  rotation = Math.abs(rotation) < threshold ? 0.0 : rotation;
-
   var SwerveModuleState = kinematics.toSwerveModuleStates(ChassisSpeeds.fromRobotRelativeSpeeds(xSpeed, ySpeed, rotation, gyro.getRotation2d()));
   SmartDashboard.putString("Drive Gyro", gyro.getAngle() + " ");
   frontLeftModule.setDesiredState(SwerveModuleState[0]);

@@ -45,6 +45,12 @@ public class SparkMaxBrushlessEncoderMotor extends SparkMaxBrushlessMotor implem
     public double getRadian() {
         return (this.getAngle() * Math.PI) / 180;
     }
+
+    @Override
+    public void holdPosition() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'holdPosition'");
+    }
     
     // @Override
     // public void printToSmartDashboard() {

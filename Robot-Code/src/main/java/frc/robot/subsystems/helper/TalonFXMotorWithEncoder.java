@@ -24,4 +24,9 @@ public class TalonFXMotorWithEncoder extends TalonFXMotor implements MotorWithEn
         return (this.getAngle() * Math.PI) / 180;
     }
 
+    @Override
+    public void holdPosition() {
+        this.motor.setPosition(this.getPosition());
+    }
+
 }

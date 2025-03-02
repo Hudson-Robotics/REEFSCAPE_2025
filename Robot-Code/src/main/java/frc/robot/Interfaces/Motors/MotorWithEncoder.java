@@ -5,4 +5,5 @@ public interface MotorWithEncoder extends Motor{
     double getAngle();
     double getRadian();
     double getSpeed();
+    void holdPosition();
 }
