@@ -13,7 +13,7 @@ public class SparkMaxBrushlessMotor implements Motor{
     private int id;
     private String name;
 
-    public double limit = .8;
+    public double limit = .75;
 
     public SparkMaxBrushlessMotor(int canBusId, String motorName)
     {

@@ -46,8 +46,8 @@ public class SparkMaxBrushlessEncoderMotor extends SparkMaxBrushlessMotor implem
         return (this.getAngle() * Math.PI) / 180;
     }
     
-    @Override
-    public void printToSmartDashboard() {
-        SmartDashboard.putString(this.getName(), "Angle " + this.getAngle());
-    }
+    // @Override
+    // public void printToSmartDashboard() {
+    //     SmartDashboard.putString(this.getName(), "Angle " + this.getAngle());
+    // }
 }
