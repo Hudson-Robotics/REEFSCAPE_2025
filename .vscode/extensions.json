@@ -1,0 +1,6 @@
+{
+    "recommedations": [
+        "mechanical-advantage.event-deploy-wpilib", //this code came from team8177 it can be changed to what ever we need
+        "richardwillis.vscode-spotless-gradle"
+    ]
+}
