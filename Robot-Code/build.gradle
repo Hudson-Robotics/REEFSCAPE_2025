@@ -1,5 +1,8 @@
 plugins {
     id "java"
+    id 'java'
+    id "application"
+    id 'application'
     id "edu.wpi.first.GradleRIO" version "2025.2.1"
 }
 
