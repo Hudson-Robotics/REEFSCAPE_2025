@@ -7,6 +7,18 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.generated.TunerConstants;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import com.ctre.phoenix6.swerve.SwerveModuleConstants;
+import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
+import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -15,6 +27,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private RobotContainer robotContainer;
+
+  private Timer matchTimer;
+  private int matchTimerRemaining;
 
   private final RobotContainer m_robotContainer;
 
@@ -25,6 +41,71 @@ public class Robot extends TimedRobot {
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+     matchTimer = new Timer();
+    matchTimeRemaining = 150;
+    // Record metadata
+    Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+    Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+    Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+    Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+    Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+    switch (BuildConstants.DIRTY) {
+      case 0:
+              Logger.recordMetadata("GitDirty", "All changes committed");
+        break;
+      case 1:
+        Logger.recordMetadata("GitDirty", "Uncomitted changes");
+        break;
+      default:
+        Logger.recordMetadata("GitDirty", "Unknown");
+        break;
+    }
+
+    // Set up data receivers & replay source
+    switch (Constants.currentMode) {
+      case REAL:
+        // Running on a real robot, log to a USB stick ("/U/logs")
+        Logger.addDataReceiver(new WPILOGWriter());
+        Logger.addDataReceiver(new NT4Publisher());
+        break;
+
+      case SIM:
+        // Running a physics simulator, log to NT
+        Logger.addDataReceiver(new NT4Publisher());
+        break;
+
+      case REPLAY:
+        // Replaying a log, set up replay source
+        setUseTiming(false); // Run as fast as possible
+        String logPath = LogFileUtil.findReplayLog();
+        Logger.setReplaySource(new WPILOGReader(logPath));
+        Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+        break;
+    }
+
+    // Start AdvantageKit logger
+    Logger.start();
+
+    // Check for valid swerve config
+    var modules =
+        new SwerveModuleConstants[] {
+          TunerConstants.FrontLeft,
+          TunerConstants.FrontRight,
+          TunerConstants.BackLeft,
+          TunerConstants.BackRight
+        };
+    for (var constants : modules) {
+      if (constants.DriveMotorType != DriveMotorArrangement.TalonFX_Integrated
+          || constants.SteerMotorType != SteerMotorArrangement.TalonFX_Integrated) {
+        throw new RuntimeException(
+            "You are using an unsupported swerve configuration, which this template does not support without manual customization. The 2025 release of Phoenix supports some swerve configurations which were not available during 2025 beta testing, preventing any development and support from the AdvantageKit developers.");
+      }
+    }
+
+    // Instantiate our RobotContainer. This will perform all our button bindings,
+    // and put our autonomous chooser on the dashboard.
+    //robotContainer = new RobotContainer();
+
     m_robotContainer = new RobotContainer();
   }
 
@@ -37,16 +118,38 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+     // Switch thread to high priority to improve loop timing
+    Threads.setCurrentThreadPriority(true, 99);
+
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    
+    // Return to normal thread priority
+    Threads.setCurrentThreadPriority(false, 10);
+
+    // Calculate remaining match time
+    matchTimeRemaining = 150 - (int) matchTimer.get(); // Assuming a 150-second match duration
+
+    // Log match time to Shuffleboard
+    Logger.recordOutput("Match Timer", matchTimeRemaining);
+    SmartDashboard.putNumber("Match Timer", matchTimeRemaining);
+  }
+
+  @Override
+  public void robotInit() {
+    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+    // autonomous chooser on the dashboard.
+    m_robotContainer = new RobotContainer();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+      matchTimer.stop(); // Stop the timer when the robot is disabled
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -55,6 +158,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    matchTimer.reset(); // Reset the timer when the match starts
+    matchTimer.start(); // Start the timer
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -64,7 +169,15 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    // Calculate remaining match time
+    matchTimeRemaining = 150 - (int) matchTimer.get(); // Assuming a 150-second match duration
+
+    // Log match time to Shuffleboard
+    Logger.recordOutput("Match Timer", matchTimeRemaining);
+    SmartDashboard.putNumber("Match Timer", matchTimeRemaining);
+  }
+  }
 
   @Override
   public void teleopInit() {
@@ -72,6 +185,9 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    matchTimer.reset(); // Reset the timer when Teleop starts
+    matchTimer.start(); // Start the timer
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -79,17 +195,34 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    // Calculate remaining match time
+    matchTimeRemaining = 150 - (int) matchTimer.get(); // Assuming a 150-second match duration
+    
+    // Log match time to Shuffleboard
+    Logger.recordOutput("Match Timer", matchTimeRemaining);
+    SmartDashboard.putNumber("Match Timer", matchTimeRemaining);
+  }
 
+  /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
+    matchTimer.reset();
+    matchTimer.start();
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
   }
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    // Calculate remaining match time
+    matchTimeRemaining = 150 - (int) matchTimer.get(); // Assuming a 150-second match duration
+
+    // Log match time to Shuffleboard
+    Logger.recordOutput("Match Timer", matchTimeRemaining);
+    SmartDashboard.putNumber("Match Timer", matchTimeRemaining);
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override
