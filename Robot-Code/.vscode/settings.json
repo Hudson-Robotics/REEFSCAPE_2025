@@ -24,8 +24,15 @@
         "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release"
       }
     },
+    null
   ],
   "java.test.defaultConfig": "WPIlibUnitTests",
+  "spotlessGradle.format.enable": true,
+  "spotlessGradle.diagnostics.enable": false,
+  "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle",
+  "[json]": {
+    "editor.defaultFormatter": "richardwillis.vscode-spotless-gradle"
+  },
   "java.import.gradle.annotationProcessing.enabled": false,
   "java.completion.favoriteStaticMembers": [
     "org.junit.Assert.*",
@@ -39,6 +46,9 @@
     "org.mockito.Answers.*",
     "edu.wpi.first.units.Units.*"
   ],
+  "[java]": {
+    "editor.defaultFormatter": "redhat.java"
+  }
   "java.completion.filteredTypes": [
     "java.awt.*",
     "com.sun.*",
