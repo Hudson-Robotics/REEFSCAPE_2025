@@ -13,7 +13,7 @@ on:
       name: Build
       runs-on: ubuntu-latest
       container: wpilib/roborio-cross-ubuntu:2024-22.04
-      
+
       steps:
         -name: Checkout repository
          uses: actions/checkout@v4
@@ -42,3 +42,24 @@ on:
 
         -name: Run WPLib Unit Tests
          run: ./gradlew test
+  
+  deploy:
+    needs: build
+    runs-on: [self-hosted] # Use a self-hosted runner on the same network as the robot
+
+    steps:
+      -name: Checkout repository
+       uses: actions/checkout@v4
+
+      -name: Grant execute permission for Gradle
+       run: chmod +x gradlew
+
+      -name: Deploy to Robot
+       run: ./gradlew deploy
+       env:
+        TEAM_NUMBER: "4295" # Replace with your FRC team number
+
+      -name: Reboot roboRIO
+       run: ssh -o StrictHostKeyChecking=no lvuser@roborio-4295-FRC.local "sudo reboot"
+       env:
+        SSH_AUTH_SOCK: /temp/ssh_agent.sock
