@@ -96,10 +96,10 @@ public class RobotContainer {
 
   // The driver's and operators controller
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController = 
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
-  //private final CommandXboxController driverController = new CommandXboxController(0);
-  //private final CommandXboxController operatorController = new CommandXboxController(1);
+  //private final CommandXboxController m_driverController = 
+      //new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController driverController = new CommandXboxController(0);
+  private final CommandXboxController operatorController = new CommandXboxController(1);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -159,7 +159,7 @@ public class RobotContainer {
     return Autos.exampleAuto(m_exampleSubsystem);
      return autoChooser.getSelected();
     // Create config for trajectory
-    /*TrajectoryConfig config = new TrajectoryConfig(
+    TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared)
         // Add kinematics to ensure max speed is actually obeyed
