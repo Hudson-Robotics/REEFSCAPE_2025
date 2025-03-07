@@ -1,6 +1,7 @@
 package frc.robot.subsystems.helper;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -8,12 +9,12 @@ import frc.robot.Interfaces.Motors.Motor;
 
 public class TalonFXMotor implements Motor{
 
-    private TalonFX motor;
+    protected TalonFX motor;
     private final String TYPE = "TalonFX";
     private int id;
     private String name;
 
-    public double limit = .1;
+    public double limit = .3;
 
     public TalonFXMotor(int canBusId, String motorName)
     {
@@ -42,6 +43,11 @@ public class TalonFXMotor implements Motor{
     @Override
     public void printToSmartDashboard() {
         SmartDashboard.putNumber(this.getName(), this.getSpeed());
+    }
+
+    @Override
+    public void enableBrake() {
+        this.motor.setNeutralMode(NeutralModeValue.Brake);
     }
     
 }

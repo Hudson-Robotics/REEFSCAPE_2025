@@ -13,7 +13,7 @@ public class SparkMaxBrushlessMotor implements Motor{
     private int id;
     private String name;
 
-    public double limit = .1;
+    public double limit = .75;
 
     public SparkMaxBrushlessMotor(int canBusId, String motorName)
     {
@@ -42,6 +42,12 @@ public class SparkMaxBrushlessMotor implements Motor{
     @Override
     public void printToSmartDashboard() {
         SmartDashboard.putNumber(this.getName(), this.getSpeed());
+    }
+
+    @Override
+    public void enableBrake() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'enableBrake'");
     }
     
 }

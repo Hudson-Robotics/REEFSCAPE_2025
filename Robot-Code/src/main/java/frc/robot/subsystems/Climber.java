@@ -26,14 +26,7 @@ public class Climber extends SubsystemBase implements Climb  {
         SmartDashboard.putBoolean("X Button Pressed", xButtonPressed); 
         if(xButtonPressed){
             this.climb(1);
-        }
-      // Get the state of the A button (boolean)
-     boolean xButtonPressed = controller.getAButton();
-      SmartDashboard.putBoolean("X Button Pressed", xButtonPressed); 
-      SmartDashboard.putNumber("upMotor1", .01); 
-      upMotor1.set(.01); 
-      SmartDashboard.putNumber("upMotor2", .01); 
-      UpMotor2.set(.01);   
+        } 
      }
 
     @Override

@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Interfaces.Motors.MotorWithEncoder;
 
 public class SwerveModule  {
@@ -31,6 +32,10 @@ public class SwerveModule  {
         double turningSpeed = steerPID.calculate(this.getAngle().getRadians(), desiredState.angle.getRadians());
         MathUtil.clamp(turningSpeed, -.25, .25); //.25 should be a constants
         steerMotor.setSpeed(turningSpeed);
+        //SmartDashboard.putString(null, );
+
+        this.driveMotor.printToSmartDashboard();
+        this.steerMotor.printToSmartDashboard();
     }
 
     public Rotation2d getAngle()

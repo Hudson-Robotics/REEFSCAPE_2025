@@ -6,14 +6,24 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.SparkMaxIDs;
+import frc.robot.Interfaces.Motors.Motor;
 import frc.robot.Interfaces.Motors.MotorWithEncoder;
 import frc.robot.commands.Autos;
+import frc.robot.commands.DriveStraight;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.swivelL;
 import frc.robot.subsystems.helper.SparkMaxBrushlessEncoderMotor;
 import frc.robot.subsystems.helper.SwerveModule;
+import frc.robot.subsystems.helper.TalonFXMotor;
+import frc.robot.subsystems.helper.TalonFXMotorWithEncoder;
 import frc.robot.subsystems.Led;
+import frc.robot.subsystems.Intake;
+
+import javax.naming.InitialContext;
+
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -26,14 +36,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+//Driver 0 = Drive
+//Driver 1 = Manipulators
  private final SwerveDrive drivetrain = this.createSwerveDrive();
-  //private final SecurityCam camera;
- private final SwerveDrive drivetrain = new SwerveDrive();
+ private final swivelL swivel = new swivelL(new XboxController(0), new TalonFXMotorWithEncoder(12, "Swivel")); // need to move canBusId to constants and remove the xboxController from the swivel class
  private final Led leds = new Led();
+ private final Intake intake = createIntake();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  // private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -58,7 +69,7 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
   /**
@@ -68,7 +79,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return new DriveStraight(drivetrain);
   }
 
   private SwerveDrive createSwerveDrive() {
@@ -84,10 +95,16 @@ public class RobotContainer {
     MotorWithEncoder backLeftSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_LEFT_STEER, "backLeftSteer", true, 360);
     SwerveModule backLeft = new SwerveModule(backLeftDrive, backLeftSteer);
 
-    MotorWithEncoder backRightDrive = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_DRIVE, "backRightDrive", false, 1);
-    MotorWithEncoder backRightSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_STEER, "backRightSteer", true, 360);
+    MotorWithEncoder backRightDrive = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_RIGHT_DRIVE, "backRightDrive", false, 1);
+    MotorWithEncoder backRightSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_RIGHT_STEER, "backRightSteer", true, 360);
     SwerveModule backRight = new SwerveModule(backRightDrive, backRightSteer);
 
     return new SwerveDrive(frontLeft, frontRight, backLeft, backRight);
+  }
+
+  private Intake createIntake() {
+    Motor motor1 = new TalonFXMotor(29, "motor 1");
+    Motor motor2 = new TalonFXMotor(41, "motor 2");
+    return new Intake(motor1, motor2);
   }
 }

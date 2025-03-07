@@ -13,7 +13,7 @@ public class Elevator extends SubsystemBase implements interElevator{
     private XboxController controller; 
     
     public Elevator(XboxController controller, Motor eleMotor1, Motor eleMotor2) {
-        controller = new XboxController(2);
+        controller = new XboxController(1);
         this.controller = controller;
 
         this.eleMotor1 = eleMotor1; //might be more useful to name this as left and right motors
@@ -25,28 +25,28 @@ public class Elevator extends SubsystemBase implements interElevator{
         // Get the state of the RB button (boolean)
         boolean RBButtonPressed = controller.getRightBumper(); // Look into xbox controller documentation frc
         SmartDashboard.putBoolean("RB Button Pressed", RBButtonPressed);
+                //to go down-
+                boolean LBButtonPressed = controller.getLeftBumper();
+                SmartDashboard.putBoolean("LB Button Pressed", LBButtonPressed);
         //going up+
         if (RBButtonPressed) {
             this.raise();
-        }
-
-        //to go down-
-        boolean LBButtonPressed = controller.getLeftBumper();
-        SmartDashboard.putBoolean("LB Button Pressed", LBButtonPressed);
-        if (LBButtonPressed) {
+        } else if (LBButtonPressed) {
             this.drop();
+        } else {
+            this.stop();
         }
     }
 
     //the elevators are mirrored so they might have to be inverted
     @Override
     public void raise() {
-        this.setSpeed(.05);
+        this.setSpeed(.2);
     }
 
     @Override
     public void drop() {
-        this.setSpeed(-.05);
+        this.setSpeed(-.2);
     }
 
     @Override

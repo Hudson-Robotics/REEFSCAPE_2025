@@ -2,6 +2,7 @@ package frc.robot.subsystems.helper;
 
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Interfaces.Motors.MotorWithEncoder;
 
 public class SparkMaxBrushlessEncoderMotor extends SparkMaxBrushlessMotor implements MotorWithEncoder{
@@ -44,5 +45,15 @@ public class SparkMaxBrushlessEncoderMotor extends SparkMaxBrushlessMotor implem
     public double getRadian() {
         return (this.getAngle() * Math.PI) / 180;
     }
+
+    @Override
+    public void holdPosition() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'holdPosition'");
+    }
     
+    // @Override
+    // public void printToSmartDashboard() {
+    //     SmartDashboard.putString(this.getName(), "Angle " + this.getAngle());
+    // }
 }
