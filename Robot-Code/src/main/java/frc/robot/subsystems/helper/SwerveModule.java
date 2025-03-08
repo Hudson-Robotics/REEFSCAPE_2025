@@ -19,7 +19,8 @@ public class SwerveModule  {
         this.driveMotor = driveMotor;
         this.steerMotor = steerMotor;
 
-        this.steerPID = new PIDController(.5, 0, 0);
+        this.steerPID = new PIDController(.1, 0, 0);
+        this.steerPID.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     public void setDesiredState(SwerveModuleState desiredState)
@@ -29,6 +30,8 @@ public class SwerveModule  {
 
         driveMotor.setSpeed(desiredState.speedMetersPerSecond); // Not sure if this is correct // should prob be in voltage
         
+        SmartDashboard.putNumber("Measurement", this.getAngle().getRadians());
+        SmartDashboard.putNumber("Set", desiredState.angle.getRadians());
         double turningSpeed = steerPID.calculate(this.getAngle().getRadians(), desiredState.angle.getRadians());
         MathUtil.clamp(turningSpeed, -.25, .25); //.25 should be a constants
         steerMotor.setSpeed(turningSpeed);
