@@ -20,7 +20,8 @@ public class SwerveModule  {
         this.driveMotor = driveMotor;
         this.steerMotor = steerMotor;
 
-        this.steerPID = new PIDController(.5, 0, 0);
+        this.steerPID = new PIDController(.005, 0, 0);
+        this.steerPID.enableContinuousInput(-Math.PI, Math.PI);
         this.reset();
     }
 
@@ -29,7 +30,7 @@ public class SwerveModule  {
         this.driveMotor.printToSmartDashboard();
         this.steerMotor.printToSmartDashboard();
 
-        if(Math.abs(desiredState.speedMetersPerSecond) < .1)
+        if(Math.abs(desiredState.speedMetersPerSecond) < .2)
         {
             //remove jitter?
             driveMotor.setSpeed(0);
@@ -42,9 +43,11 @@ public class SwerveModule  {
         driveMotor.setSpeed(desiredState.speedMetersPerSecond); // Not sure if this is correct // should prob be in voltage
         
         double turningSpeed = steerPID.calculate(this.getAngle().getRadians(), desiredState.angle.getRadians());
+        SmartDashboard.putNumber(steerMotor.getName() + " error", steerPID.getError());
         SmartDashboard.putString(driveMotor.getName() + " and " + steerMotor.getName() + " Module", this.getAngle().getRadians() + " -> " + desiredState.angle.getRadians());
-        MathUtil.clamp(turningSpeed, -.25, .25); //.25 should be a constants
+        turningSpeed = MathUtil.clamp(turningSpeed, -.25, .25); //.25 should be a constants
         steerMotor.setSpeed(turningSpeed);
+        //steerMotor.setSpeed(turningSpeed);
         //SmartDashboard.putString(null, );
     }
 

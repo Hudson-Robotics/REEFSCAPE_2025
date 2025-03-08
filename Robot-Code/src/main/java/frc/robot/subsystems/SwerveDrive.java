@@ -14,6 +14,7 @@ import javax.xml.xpath.XPathVariableResolver;
 
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -44,6 +45,9 @@ public class SwerveDrive extends SubsystemBase  implements DriveTrain {
     Translation2d backRightLocation = new Translation2d(.381, -.381); //.381 is half of .762 m which is 30 inches in freedom units
 
     SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightsLocation, backLeftLocation, backRightLocation);
+    SlewRateLimiter speedXSlewRate = new SlewRateLimiter(1.5);
+    SlewRateLimiter speedYSlewRate = new SlewRateLimiter(1.5);
+    SlewRateLimiter speedRotSlewRate = new SlewRateLimiter(1.5);
 
     public SwerveDrive(SwerveModule flm, SwerveModule frm, SwerveModule blm, SwerveModule brm) { 
          controller = new XboxController(1);
@@ -80,7 +84,7 @@ public class SwerveDrive extends SubsystemBase  implements DriveTrain {
      public void periodic() {
       double speedX = this.controller.getLeftX();
       double speedY = this.controller.getLeftY();
-      double rotate = this.controller.getRightTriggerAxis(); //double rotate = this.controller.getRightY(); // this is for the Afterglow
+      double rotate = this.controller.getRightY(); //double rotate = this.controller.getRightY(); // this is for the Afterglow
 
       double threshold = .04;
       speedX = Math.abs(speedX) < threshold ? 0.0 : speedX;
@@ -89,34 +93,22 @@ public class SwerveDrive extends SubsystemBase  implements DriveTrain {
 
       // maybe add slewrates....
 
-      drive(speedX, speedY, rotate);
+      drive(speedXSlewRate.calculate(speedX), speedYSlewRate.calculate(speedY), speedRotSlewRate.calculate(rotate));
 
 
     }
-     
-
-    
-
-
-      
-      
-  
-
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
-  }
 
 @Override
 public void drive( double xSpeed,  double ySpeed,  double rotation) {
   //var SwerveModuleState = kinematics.toSwerveModuleStates(ChassisSpeeds.fromRobotRelativeSpeeds(xSpeed, ySpeed, rotation, gyro.getRotation2d()));
-  var SwerveModuleState = kinematics.toSwerveModuleStates(new ChassisSpeeds(xSpeed, ySpeed, rotation));
+  var SwerveModuleState = kinematics.toSwerveModuleStates(new ChassisSpeeds(ySpeed, xSpeed, rotation));
   SwerveDriveKinematics.desaturateWheelSpeeds(SwerveModuleState, 9);
 
   SmartDashboard.putString("Drive Gyro", gyro.getAngle() + " ");
+  SmartDashboard.putNumber("GyroAngle", gyro.getYaw());
   frontLeftModule.setDesiredState(SwerveModuleState[0]);
   frontRightModule.setDesiredState(SwerveModuleState[1]);
-  backLeftModule.setDesiredState(SwerveModuleState[2]);
+  //backLeftModule.setDesiredState(SwerveModuleState[2]);
   backRightModule.setDesiredState(SwerveModuleState[3]);
 
         SmartDashboard.putString("Front Left", SwerveModuleState[0].toString());

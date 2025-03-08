@@ -30,7 +30,14 @@ public class SparkMaxBrushlessEncoderMotor extends SparkMaxBrushlessMotor implem
     @Override
     public double getRadian() {
         double absoluteRotation = this.encoderMotor.getAbsolutePosition().getValueAsDouble();
-        return absoluteRotation * 2 * Math.PI;
+        absoluteRotation = absoluteRotation * 2 * Math.PI;
+        if (absoluteRotation < Math.PI)
+        {
+            return absoluteRotation;
+        } else {
+            return absoluteRotation - 2 * Math.PI;
+        }
+        //return absoluteRotation * 2 * Math.PI;
     }
 
     @Override
