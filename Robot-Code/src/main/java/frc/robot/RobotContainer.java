@@ -15,6 +15,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.swivelL;
 import frc.robot.subsystems.helper.SparkMaxBrushlessEncoderMotor;
+import frc.robot.subsystems.helper.SparkMaxBrushlessMotor;
 import frc.robot.subsystems.helper.SwerveModule;
 import frc.robot.subsystems.helper.TalonFXMotor;
 import frc.robot.subsystems.helper.TalonFXMotorWithEncoder;
@@ -39,9 +40,9 @@ public class RobotContainer {
 //Driver 0 = Drive
 //Driver 1 = Manipulators
  private final SwerveDrive drivetrain = this.createSwerveDrive();
- private final swivelL swivel = new swivelL(new XboxController(0), new TalonFXMotorWithEncoder(12, "Swivel")); // need to move canBusId to constants and remove the xboxController from the swivel class
+ //private final swivelL swivel = new swivelL(new XboxController(0), new TalonFXMotorWithEncoder(12, "Swivel")); // need to move canBusId to constants and remove the xboxController from the swivel class
  private final Led leds = new Led();
- private final Intake intake = createIntake();
+ //private final Intake intake = createIntake();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   // private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -83,20 +84,20 @@ public class RobotContainer {
   }
 
   private SwerveDrive createSwerveDrive() {
-    MotorWithEncoder frontLeftDrive = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_DRIVE, "FrontLeftDrive", false, 1);
-    MotorWithEncoder frontLeftSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_STEER, "FrontLeftSteer", true, 360);
+    Motor frontLeftDrive = new SparkMaxBrushlessMotor(SparkMaxIDs.FRONT_LEFT_DRIVE, "FrontLeftDrive");
+    MotorWithEncoder frontLeftSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_STEER, "FrontLeftSteer", 24);
     SwerveModule frontLeft = new SwerveModule(frontLeftDrive, frontLeftSteer);
 
-    MotorWithEncoder frontRightDrive = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_RIGHT_DRIVE, "frontRightDrive", false, 1);
-    MotorWithEncoder frontRightSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_RIGHT_STEER, "frontRightSteer", true, 360);
+    Motor frontRightDrive = new SparkMaxBrushlessMotor(SparkMaxIDs.FRONT_RIGHT_DRIVE, "frontRightDrive");
+    MotorWithEncoder frontRightSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_RIGHT_STEER, "frontRightSteer", 22);
     SwerveModule frontRight = new SwerveModule(frontRightDrive, frontRightSteer);
 
-    MotorWithEncoder backLeftDrive = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_LEFT_DRIVE, "backLeftDrive", false, 1);
-    MotorWithEncoder backLeftSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_LEFT_STEER, "backLeftSteer", true, 360);
+    Motor backLeftDrive = new SparkMaxBrushlessMotor(SparkMaxIDs.BACK_LEFT_DRIVE, "backLeftDrive");
+    MotorWithEncoder backLeftSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_LEFT_STEER, "backLeftSteer", 21);
     SwerveModule backLeft = new SwerveModule(backLeftDrive, backLeftSteer);
 
-    MotorWithEncoder backRightDrive = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_RIGHT_DRIVE, "backRightDrive", false, 1);
-    MotorWithEncoder backRightSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_RIGHT_STEER, "backRightSteer", true, 360);
+    Motor backRightDrive = new SparkMaxBrushlessMotor(SparkMaxIDs.BACK_RIGHT_DRIVE, "backRightDrive");
+    MotorWithEncoder backRightSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_RIGHT_STEER, "backRightSteer", 23);
     SwerveModule backRight = new SwerveModule(backRightDrive, backRightSteer);
 
     return new SwerveDrive(frontLeft, frontRight, backLeft, backRight);

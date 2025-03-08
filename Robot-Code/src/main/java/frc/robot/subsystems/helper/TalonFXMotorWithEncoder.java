@@ -29,4 +29,9 @@ public class TalonFXMotorWithEncoder extends TalonFXMotor implements MotorWithEn
         this.motor.setPosition(this.getPosition());
     }
 
+    @Override
+    public void setPosition(double position) {
+        this.motor.setPosition(0);
+    }
+
 }
