@@ -15,6 +15,7 @@ public class SparkMaxBrushlessEncoderMotor extends SparkMaxBrushlessMotor implem
     {
         super(canBusId, motorName);
         this.encoderMotor = new CANcoder(canCoderId);
+        // this.motor.setInverted(false); possible theory of inverting the motors
     }
 
     @Override

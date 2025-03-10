@@ -39,6 +39,8 @@ public class SwerveDrive extends SubsystemBase  implements DriveTrain {
 
   private AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
 
+    // another thing to look into - look in the `watch-yt-vid-frc-0-to-autonomous` branch
+    // has a different setup for the translations
     Translation2d frontLeftLocation = new Translation2d(-.381, .381); //.381 is half of .762 m which is 30 inches in freedom units
     Translation2d frontRightsLocation = new Translation2d(.381, .381); //.381 is half of .762 m which is 30 inches in freedom unitS
     Translation2d backLeftLocation = new Translation2d(-.381, -.381); //.381 is half of .762 m which is 30 inches in freedom units
