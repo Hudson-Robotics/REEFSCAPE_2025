@@ -17,14 +17,28 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.*;
+
+import com.ctre.phoenix6.CANBus;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.ModuleConfig;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.pathfinding.Pathfinding;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
@@ -265,3 +279,148 @@ public static final class WristConstants {
   }
 
 }
+
+
+public class Drive extends SubsystemBase {
+  // TunerConstants doesn't include these constants, so they are declared locally
+  static final double ODOMETRY_FREQUENCY = 
+      new CANBus (TunerConstants.DrivetrainConstants.CANBusName).isNetworkFD() ? 250.0 : 100.0;
+  public static final double DRIVE_BASE_RADIUS =
+      Math.max(
+        Math.max(
+          Math.hybot(TunerConstants.FrontLeft.LocationX, TunerConstants.FrontLeft.LocationY),
+          Math.hybot(TunerConstants.FrontRight.LocationX, TunerConstants.FrontRight.LocationY)
+        ),
+      Math.max(
+        Math.hybot(TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
+        Math.hybot(TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
+      ));
+
+  // PathPlanner configure constants
+  private static final double ROBOT_MASS_KG = 48.0; 
+  private static final double ROBOT_MOI = 6.883;
+  private static final double WHEEL_COF = 1.2;
+  private static final RobotConfig PP_CONFIG =
+      new RobotConfig(
+          ROBOT_MASS_KG,
+          ROBOT_MOI,
+          new ModuleConfig(
+            TunerConstants.FrontLeft.WheelRadius,
+            TunerConstants.kSpeedAt12Volts.in(MetersPerSecond),
+            WHEEL_COF,
+            DCMotor.getNEO(kDriverControllerPort)(1),
+                .withReduction(TunerConstants.FrontLeft.DriveMotorGearRatio),
+            TunerConstants.FrontLeft.SlipCurrent, 1),
+            getModuleTranslations());
+          
+  static final Lock OdometryLock = new ReentrantLock();
+  private final GyroIO gyroIO;
+  private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLOgged();
+  public final Module[] modules = new Module[4];
+  private final SysIdRoutine sysId;
+  private final Alert gyroDisconnectedAlert =
+      new Alert("Gyro Disconnected, using kinematics as fallback.", AlertType.kError);
+
+  private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
+  private Rotation2d rawGyroRotation = new Rotation2d();
+  private SwerveModulePosition[] lastModulePositions = // For delta tracking
+      new SwerveModulePosition[] {
+        new SwerveModulePosition(),
+        new SwerveModulePosition(),
+        new SwerveModulePosition(),
+        new SwerveModulePosition()
+      };
+  private SwerveDrivePoseEstimator poseEstimator =
+      new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+  public Drive(
+    GyroIO gyroIO,
+    ModuleIO flModuleIO,
+    ModuleIO frModuleIO,
+    ModuleIO blModuleIO,
+    ModuleIO brModuleIO) {
+      this.gyroIO = gyroIO;
+      modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft, PP_CONFIG);
+      modules[1] = new Module(frModuleIO, 1, TunerConstants.FrontRight, PP_CONFIG);
+      modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft, PP_CONFIG);
+      modules[3] = new Module(brModuleIO, 3, TunerConstants.BackRight, PP_CONFIG);
+
+      // Usage reporting for swerve template
+      HAL.report(tResourceType.KresourceType_RobotDrive, tInstances.kRobotDriveSwerve_AdvantageKit);
+
+      //start odometry thread
+      PhoenixOdometryThread.getInstance().start();
+
+      // Sweve Visualization for dashboard
+      SmartDashboard.putData(
+        "Swerve Drive",
+        new Sendable() {
+          @Override
+          public void initSendable(SendableBuilder builder) {
+            builder.setSmartDashboardType("Swerve Drive");
+
+            builder.addDoubleProperty("Front Left Drive Motor", modules[0].getDriveMotor()::getVelocity, null);
+            builder.addDoubleProperty("Front Left Steer Motor", modules[0].getSteerMotor()::getVelocity, null);
+            builder.addDoubleProperty("Front Right Drive Motor", modules[1].getDriveMotor()::getVelocity, null);
+            builder.addDoubleProperty("Front Right Steer Motor", modules[1].getSteerMotor()::getVelocity, null);
+            builder.addDoubleProperty("Back Left Drive Motor", modules[2].getDriveMotor()::getVelocity, null);
+            builder.addDoubleProperty("Back Left Steer Motor", modules[2].getSteerMotor()::getVelocity, null);
+            builder.addDoubleProperty("Back Right Drive Motor", modules[3].getDriveMotor()::getVelocity, null);
+            builder.addDoubleProperty("Back Right Steer Motor", modules[3].getSteerMotor()::getVelocity, null);
+
+            builder.addDoubleProperty("Front Left Angle", 
+          }
+        }
+      );
+      sysId = new SysIdRoutine(this);
+      poseEstimator.setModulePositions(getModulePositions());
+      poseEstimator.setGyroAngle(gyroIO.getAngle());
+      poseEstimator.setGyroRate(gyroIO.getRate());
+      poseEstimator.setModuleVelocities(getModuleVelocities());
+      poseEstimator.setModulePositions(getModulePositions());
+      poseEstimator.setGyroAngle(gyroIO.getAngle());
+      poseEstimator.setGyroRate(gyroIO.getRate());
+      poseEstimator.setModuleVelocities(getModuleVelocities());
+      poseEstimator.setModulePositions(getModulePositions());
+      poseEstimator.setGyroAngle(gyroIO.getAngle());
+      poseEstimator.setGyroRate(gyroIO.getRate());
+      poseEstimator.setModuleVelocities(getModuleVelocities());
+      poseEstimator.setModulePositions(getModulePositions());
+      poseEstimator.setGyroAngle(gyroIO.getAngle());
+      poseEstimator.setGyroRate(gyroIO.getRate());
+      poseEstimator.setModuleVelocities(getModuleVelocities());
+      poseEstimator.setModulePositions(getModulePositions());
+      poseEstimator.setGyroAngle(gyroIO.getAngle());
+      poseEstimator.setGyroRate(gyroIO.getRate());
+      poseEstimator.setModuleVelocities(getModuleVelocities());
+      poseEstimator.setModulePositions(getModulePositions());
+      poseEstimator.setGyroAngle(gyroIO.getAngle());
+      poseEstimator.setGyroRate(gyroIO.getRate());
+      poseEstimator.setModuleVelocities(getModuleVelocities());
+      poseEstimator.setModulePositions(getModulePositions());
+      poseEstimator.setGyroAngle(gyroIO.getAngle());
+      poseEstimator.setGyroRate(gyroIO.getRate());
+      poseEstimator.setModuleVelocities(getModuleVelocities());
+      poseEstimator.setModulePositions(getModulePositions());
+      poseEstimator.setGyroAngle(gyroIO.getAngle());
+      poseEstimator.set
+    }
+  )
+  private final SwerveDrive drivetrain = new SwerveDrive();
+  private final GyroIO gyro = new GyroIO();
+  private final ModuleIO moduleIO = new ModuleIO();
+  private final ModuleIOSim moduleIOSim = new ModuleIOSim();
+  private final SparkMaxBrushlessEncoderMotor frontLeftDrive = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_DRIVE, "FrontLeftDrive", false, 1);
+  private final SparkMaxBrushlessEncoderMotor frontLeftSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_STEER, "FrontLeftSteer", true, 360);
+  private final SparkMaxBrushlessEncoderMotor frontRightDrive = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_RIGHT_DRIVE, "frontRightDrive", false, 1);
+  private final SparkMaxBrushlessEncoderMotor frontRightSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_RIGHT_STEER, "frontRightSteer", true, 360);
+  private final SparkMaxBrushlessEncoderMotor backLeftDrive = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_LEFT_DRIVE, "backLeftDrive", false, 1);
+  private final SparkMaxBrushlessEncoderMotor backLeftSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_LEFT_STEER, "backLeftSteer", true, 360);
+  private final SparkMaxBrushlessEncoderMotor backRightDrive = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_DRIVE, "backRightDrive", false, 1);
+  private final SparkMaxBrushlessEncoderMotor backRightSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_STEER, "backRightSteer", true, 360);
+  private final SwerveModule frontLeft = new SwerveModule(frontLeftDrive, frontLeftSteer);
+  private final SwerveModule frontRight = new SwerveModule(frontRightDrive, frontRightSteer);
+  private final SwerveModule backLeft = new SwerveModule(backLeftDrive, backLeftSteer);
+  private final SwerveModule backRight = new SwerveModule(backRightDrive, backRightSteer);
+  private final SwerveDrive drivetrain = new SwerveDrive(frontLeft, frontRight, backLeft, backRight);
+  private final SwerveDrive drivetrain = new SwerveDrive();
+  private final SwerveDrive drivetrain = new SwerveDrive();

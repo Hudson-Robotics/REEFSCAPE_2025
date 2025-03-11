@@ -79,7 +79,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveDrive drivetrain = this.createSwerveDrive();
-  private final Wrist wrist
+  private final Wrist wrist;
   private final Drive drive;
   private final Intake intake;
   private final Climber climber;
