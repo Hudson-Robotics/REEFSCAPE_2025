@@ -96,10 +96,22 @@ public class RobotContainer {
 
   // The driver's and operators controller
   // Replace with CommandPS4Controller or CommandJoystick if needed
+  // Configure your button bindings here
   //private final CommandXboxController m_driverController = 
       //new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController driverController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
+  private void configureButtonBindings() {
+    new JoystickButton(m_driverController, Button.kR1.value)
+        .whileTrue(new RunCommand(
+            () -> m_robotDrive.setX(),
+            m_robotDrive));
+    // Resets direction to 0 degrees
+    new JoystickButton(m_drivercontroller, Button.kL1.values()
+        .whileTrue(new RunCommand(
+          () -> m_robotDrive.zeroHeading(),
+          m_robotDrive));
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
