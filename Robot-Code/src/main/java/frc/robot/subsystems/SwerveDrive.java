@@ -3,8 +3,14 @@
 package frc.robot.subsystems;
 
 import frc.robot.subsystems.helper.SwerveModule;
-//import com.ctre.phoenix6.swerve.SwerveModule;
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.ctre.phoenix6.hardware.CANEncoder;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkMax;
 
 import static edu.wpi.first.units.Units.Newton;
 
@@ -111,3 +117,102 @@ public void drive(final double xspeed, final double yspeed, final double rotatio
   }
 }
 
+public class DriveSubsystem {
+  private static final int LEFT_FRONT_ID = 1;
+  private static final int RIGHT_FRONT_ID = 2;
+  private static final int LEFT_BACK_ID = 3;
+  private static final int RIGHT_BACK_ID = 4;
+  private static final int REAR_RIGHT_BACK_ID = 5;
+  private static final int REAR_LEFT_BACK_ID = 6;
+  private static final int REAR_RIGHT_FRONT_ID = 7;
+  private static final int REAR_LEFT_FRONT_ID = 8;
+  private static final int FRONT_LEFT_ENCODER_ID = 9;
+  private static final int FRONT_RIGHT_ENCODER_ID = 10;
+  private static final int BACK_LEFT_ENCODER_ID = 11;
+  private static final int BACK_RIGHT_ENCODER_ID = 12;
+
+  // Define Spark MAX motor controllers
+  private final CANSparkMax leftFront = new CANSparkMAX(LEFT_FRONT_ID, Motortype.kBrushless);
+  private final CANSparkMax rightFront = new CANSparkMAX(RIGHT_FRONT_ID, Motortype.kBrushless);
+  private final CANSparkMax leftBack = new CANSparkMAX(LEFT_BACK_ID, Motortype.kBrushless);
+  private final CANSparkMax rightBack = new CANSparkMAX(RIGHT_BACK_ID, Motortype.kBrushless);
+  private final CANSparkMax rearRightBack = new CANSparkMAX(REAR_RIGHT_BACK_ID, Motortype.kBrushless);
+  private final CANSparkMax rearLeftBack = new CANSparkMAX(REAR_LEFT_BACK_ID, Motortype.kBrushless);
+  private final CANSparkMax rearRightFront = new CANSparkMAX(REAR_RIGHT_FRONT_ID, Motortype.kBrushless);
+  private final CANSparkMax rearLeftFront = new CANSparkMAX(REAR_LEFT_FRONT_ID, Motortype.kBrushless);
+
+  // Define External CANcoders
+  private final CANcoder leftEncoder = new CANCoder(FRONT_LEFT_ENCODER_ID);
+  private final CANCoder rightEncoder = new CANCoder(FRONT_RIGHT_ENCODER_ID);
+  private final CANCoder backEncoder = new CANCoder(BACK_LEFT_ENCODER_ID);
+  private final CANCoder frontEncoder = new CANCoder(BACK_RIGHT_ENCODER_ID);
+
+  public DriveSubsystem(){
+    // Restore factory defaults
+    leftFront.restoreFactoryDefaults();
+    rightFront.restoreFactoryDefaults();
+    leftBack.restoreFactoryDefaults();
+    rightBack.restoreFactoryDefaults();
+    rearRightBack.restoreFactoryDefaults();
+    rearLeftBack.restoreFactoryDefaults();
+    rearRightFront.restoreFactoryDefaults();
+    rearLeftFront.restoreFactoryDefaults();
+
+    // Configure follower motors
+    leftBack.follow(leftFront);
+    rightBack.follow(rightFront);
+
+    // Set motor inversions (adjust if needed)
+    leftFront.setInverted(false);
+    rightFront.setInverted(true);
+
+    // Apply CANcoder configurations (if needed)
+    CANcoderConfiguration encoderConfig = new CANcoderConfiguration();
+    leftEncoder.getConfigurator().apply(cancoderConfig);
+    rightEncoder.getConfigurator().apply(cancoderConfig);
+    backEncoder.getConfigurator().apply(cancoderConfig);
+    frontEncoder.getConfigurator().apply(cancoderConfig);
+  }
+
+  // Get CANcoder positions (rotations)
+  public double getLeftPosition(){
+    return leftEncoder.getPosition().getValue();
+  }
+
+  public double getRightPosition(){
+    return rightEncoder.getPosition().getValue();
+  }
+
+  // need to change
+  public double getBackPosition(){
+    return backEncoder.getPosition().getValue();
+  }
+
+  //need to change
+  public double getFrontPosition(){
+    return frontEncoder.getPosition().getValue();
+  }
+
+  // Get velocity (RPM)
+  public double getLeftVelocity(){
+    return leftEncoder.getVelocity().getValue();
+  }
+
+  public double getRightVelocity(){
+    return rightEncoder.getVelocity().getValue();
+  }
+
+  // Reset encoders
+  public void resetEncoders(){
+    leftEncoder.setPosition(0);
+    rightEncoder.setPosition(0);
+    backEncoder.setPosition(0);
+    frontEncoder.setPosition(0);
+  }
+
+  // Tank drive method (for teleop)
+  public void tankDrive(double leftSpeed, double rightSpeed){
+    leftFront.set(leftSpeed);
+    rightFront.set(rightSpeed);
+  }
+}

@@ -242,6 +242,7 @@ public class RobotContainer {
     return new SwerveDrive(frontLeft, frontRight, backLeft, backRight);
   }
 }
+
 public class DriveSubsystem {
   // Create a spark MAX motor controller for the NEO
   private static final CANSparkMax driveMotor = new CANSparkMax(1, MotorType.kBrushless);

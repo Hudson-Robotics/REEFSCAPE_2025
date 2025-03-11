@@ -76,7 +76,7 @@ dependencies {
     //dependency for Middleware-Code
     implementation fileTree(dir: '../../Middleware-Code/build/libs', include: 'middleware-code-*.jar')
 
-    implementation 'com.ctre.phoenix6:Phoenix6-java:latest'
+    //implementation 'com.ctre.phoenix6:Phoenix6-java:latest'
 }
 
 test {
