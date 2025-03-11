@@ -24,6 +24,8 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 /**
  * Physics sim implementation of module IO. The sim models are configured using a set of module
@@ -39,8 +41,10 @@ public class ModuleIOSim implements ModuleIO {
   private static final double DRIVE_KV = 1.0 / Units.rotationsToRadians(1.0 / DRIVE_KV_ROT);
   private static final double TURN_KP = 8.0;
   private static final double TURN_KD = 0.0;
-  private static final DCMotor DRIVE_GEARBOX = DCMotor.getKrakenX60Foc(1);
-  private static final DCMotor TURN_GEARBOX = DCMotor.getKrakenX60Foc(1);
+  [rivate static final CANSparkMax driveMotor = new CANSparkMax(1, MotorType.kBrushless); // Set the canID 
+  private static final CANSparkMax turnMotor = new CANSparkMax(2, MotorType.kBrushless);]
+  //private static final DCMotor DRIVE_GEARBOX = DCMotor.getKrakenX60Foc(1);
+  //private static final DCMotor TURN_GEARBOX = DCMotor.getKrakenX60Foc(1);
 
   private final DCMotorSim driveSim;
   private final DCMotorSim turnSim;

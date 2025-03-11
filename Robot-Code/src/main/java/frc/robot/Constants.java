@@ -661,7 +661,7 @@ public class Drive extends SubsystemBase {
      };
    }
  }
- 
+
       sysId = new SysIdRoutine(this);
       poseEstimator.setModulePositions(getModulePositions());
       poseEstimator.setGyroAngle(gyroIO.getAngle());
@@ -696,7 +696,7 @@ public class Drive extends SubsystemBase {
       poseEstimator.set
     }
   )
-  private final SwerveDrive drivetrain = new SwerveDrive();
+  //private final SwerveDrive drivetrain = new SwerveDrive();
   private final GyroIO gyro = new GyroIO();
   private final ModuleIO moduleIO = new ModuleIO();
   private final ModuleIOSim moduleIOSim = new ModuleIOSim();
@@ -713,6 +713,6 @@ public class Drive extends SubsystemBase {
   private final SwerveModule backLeft = new SwerveModule(backLeftDrive, backLeftSteer);
   private final SwerveModule backRight = new SwerveModule(backRightDrive, backRightSteer);
   private final SwerveDrive drivetrain = new SwerveDrive(frontLeft, frontRight, backLeft, backRight);
-  private final SwerveDrive drivetrain = new SwerveDrive();
-  private final SwerveDrive drivetrain = new SwerveDrive();
+  //private final SwerveDrive drivetrain = new SwerveDrive();
+  //private final SwerveDrive drivetrain = new SwerveDrive();
 

@@ -68,6 +68,17 @@ import frc.robot.subsystems.Led;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkMax;
+import com.revrobotics.SparkMaxBrushless;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxPIDController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -85,10 +96,10 @@ public class RobotContainer {
   private final Climber climber;
   private final Elevator elevator;
   public final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
+  //private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
   //private final SecurityCam camera;
-  private final SwerveDrive drivetrain = new SwerveDrive();
+  //private final SwerveDrive drivetrain = new SwerveDrive();
   private final Led leds = new Led();
  
   // Dashboard inputs
@@ -230,4 +241,103 @@ public class RobotContainer {
 
     return new SwerveDrive(frontLeft, frontRight, backLeft, backRight);
   }
+}
+public class DriveSubsystem {
+  // Create a spark MAX motor controller for the NEO
+  private static final CANSparkMax driveMotor = new CANSparkMax(1, MotorType.kBrushless);
+  // Get the motor's PID controller
+  private static final SparkMaxPIDController pidController = driveMotor.getPIDController();
+  // Get the external CANcoder
+  private static final CANcoder cancoder = new CANcoder(2);
+  // Create a PID controller for the NEO
+  //private static final PIDController drivePID = new PIDController(0.1, 0.0, 0.0);
+  // Create a PID controller for the NEO
+  //private static final PIDController turnPID = new PIDController(0.1, 0.0, 0.0);
+  public DriveSubsystem() {
+    // Restore default settings
+    driveMotor.restoreFactoryDefaults();
+    // Set the NEO to brake mode
+    //driveMotor.setIdleMode(IdleMode.kBrake);
+    // Configure CANcoder (Optional: Set absolute reference, sensor direction, etc)
+    CANcoderConfiguration cancoderConfig = new CANcoderConfiguration();
+    cancoder.getConfigurator().apply(cancoderConfig);
+    // Set motor inversion if needed
+    driveMotor.setInverted(false);
+    // Set the NEO to follow the encoder
+    //driveMotor.follow(driveEncoder);
+    // Set the NEO to follow the encoder
+    //driveMotor.follow(driveEncoder);
+    // Configure the PID values (example values, tune these for your robot)
+    pidController.setP(0.1);
+    pidController.setI(0.0);
+    pidController.setD(0.0);
+    pidController.setFF(0.0);
+    // Set the conversion factor (optional, see below)
+    //driveEncoder.setPositionConversionFactor(1.0); // Adjust based on wheel size and gearing
+    //driveEncoder.setVelocityConversionFactor(1.0); // Adjust based on RPM scaling
+  }
+  // Method to get the encoder position
+  //public double getEncoderPosition() {
+    //return driveEncoder.getPosition();
+ // }
+  // Method to get the encoder velocity
+  //public double getEncoderVelocity() {
+    //return driveEncoder.getVelocity();
+  //}
+  // Reset encoder position
+  //public void resetEncoder() {
+    //driveEncoder.setPosition(0);
+  //}
+
+  // Get CANcoder absolute position (in rotations)
+  public double getAbsolutePosition(){
+    return cancoder.getAbsolutePosition().getValue();
+  }
+  // Get CANcoder relative position (in rotations)
+  public double getRelativePosition(){
+    return cancoder.getPosition().getValue();
+  }
+  // Get CANcoder velocity (in RPM)
+  public double getVelocity(){
+    return cancoder.getVelocity().getValue();
+  }
+  // Reset CANcoder position (relative mode only)
+  public void resetEncoder(){
+    cancoder.setPosition(0);
+  }
+
+  double wheelDiameter = 6.0; // Wheel diameter in inches
+  double gearRatio = 10.0; // Gear ratio (adjust for your robot)
+  // Circumference of wheel (in inches)
+  double wheelCircumference = Math.PI * wheelDiameter;
+  // Conversion factor: rotations -> inches
+  double positionFactor = wheelCircumference / gearRatio;
+  double velocityFactor = positionFactor / 60.0 // convert RPM to inches/sec
+  // Convert CANcoder readings
+  double positionInInches = getRelativePosition() * positionFactor;
+  double velocityInInchesPerSec = getVelocity() * velocityFactor;
+
+  double absolutePos = getAbsolutePosition();
+  double relativePos = getRelativePosition();
+  double velocity = getVelocity();
+
+  System.out.println("Absolute Position: " + absolutePos + " rotations");
+  System.out.println("Relative Position: " + relativePos + " rotations");
+  System.out.println("Velocity: " + velocity + " RPM");
+
+  resetEncoder();
+  System.out.println("Encoder reset. New position: " + getRelativePosition());
+
+  pidController.setFeedbackDevice(cancoder);
+  // Apply conversion Factors
+  //driveEncoder.setPositionConversionFactor(positionFactor);
+  //driveEncoder.setVelocityConversionFactor(velocityFactor);
+
+  //double position = getEncoderPosition(); // Get position in inches
+  //double velocity = getEncoderVelocity(); // Get velocity in inches/sec
+  //System.out.println("Position: " + position + " inches");
+  //System.out.println("Velocity: " + velocity + " inches/sec");
+
+  //resetEncoder();
+  //System.out.prontln("Encoder reset. New position: " + getEncoderPosition());
 }

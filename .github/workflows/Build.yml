@@ -3,10 +3,10 @@ name: Java CI with Gradle
 on:
   push:
     branches:
-      [- "main" ]
+      [ "main" ]
   pull_request:
     branches:
-      [- "main" ]
+      [ "main" ]
 
   jobs:
     build:
@@ -23,6 +23,14 @@ on:
          with:
           distribution: 'temurin'
           java-version: '17'
+
+        -name: Setup Gradle
+         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+         with:
+          gradle-version: '7.3.3'
+
+        -name: Build with Gradle Wrapper
+         run: ./gradlew build
 
         -name: Cache Gradle dependencies
          uses: actions/cache@v3
@@ -43,6 +51,32 @@ on:
         -name: Run WPLib Unit Tests
          run: ./gradlew test
   
+  dependency-submission: 
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      -name: Checkout repository
+       uses: actions/checkout@v4
+
+      -name: Set up JDK 17
+       uses: actions/setup-java@v3
+       with:
+        distribution: 'temurin'
+        java-version: '17'
+
+      -name: Setup Gradle
+       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+       with:
+        gradle-version: '7.3.3'
+
+      -name: Cache Gradle dependencies
+       uses: actions/cache@v3
+       with:
+
+      -name: Generate and submit dependency graph
+       run: gradle/actions/dependecy-submission@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
   deploy:
     needs: build
     runs-on: [self-hosted] # Use a self-hosted runner on the same network as the robot
