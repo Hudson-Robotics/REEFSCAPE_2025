@@ -110,7 +110,7 @@ public void drive( double xSpeed,  double ySpeed,  double rotation) {
   SmartDashboard.putNumber("GyroAngle", gyro.getYaw());
   frontLeftModule.setDesiredState(SwerveModuleState[0]);
   frontRightModule.setDesiredState(SwerveModuleState[1]);
-  //backLeftModule.setDesiredState(SwerveModuleState[2]);
+  backLeftModule.setDesiredState(SwerveModuleState[2]);
   backRightModule.setDesiredState(SwerveModuleState[3]);
 
         SmartDashboard.putString("Front Left", SwerveModuleState[0].toString());
