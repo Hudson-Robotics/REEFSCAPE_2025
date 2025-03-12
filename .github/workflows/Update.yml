@@ -2,9 +2,9 @@ on:
     workflow_dispatch:
       inputs:
         releaseVersion:
-          description: "Release version number"
-          type: string
-          required: true
+            description: "Release version number"
+            type: string
+            required: true
   jobs:
     update:
       runs-on: ubuntu-latest
