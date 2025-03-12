@@ -3,10 +3,10 @@ name: Java CI with Gradle
 on:
   push:
     branches:
-      [ "main" ]
+      - "main"
   pull_request:
     branches:
-      [ "main" ]
+      - "main"
 
   jobs:
     build:
@@ -73,6 +73,12 @@ on:
       -name: Cache Gradle dependencies
        uses: actions/cache@v3
        with:
+         path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+         restore_keys: |
+            ${{ runner.os }}-gradle-
 
       -name: Generate and submit dependency graph
        run: gradle/actions/dependecy-submission@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
@@ -91,9 +97,9 @@ on:
       -name: Deploy to Robot
        run: ./gradlew deploy
        env:
-        TEAM_NUMBER: "4295" # Replace with your FRC team number
+         TEAM_NUMBER: "4295" # Replace with your FRC team number
 
       -name: Reboot roboRIO
        run: ssh -o StrictHostKeyChecking=no lvuser@roborio-4295-FRC.local "sudo reboot"
        env:
-        SSH_AUTH_SOCK: /temp/ssh_agent.sock
+         SSH_AUTH_SOCK: /temp/ssh_agent.sock
