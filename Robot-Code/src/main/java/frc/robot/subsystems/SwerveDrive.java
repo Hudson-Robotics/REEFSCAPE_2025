@@ -216,3 +216,65 @@ public class DriveSubsystem {
     rightFront.set(rightSpeed);
   }
 }
+
+public class SwerveModule {
+  private final CANSparkMax driveMotor;
+  private final CANSparkMax turnMotor;
+  private final CANcoder cancoder;
+
+  private final double angleOffset;
+
+  public SwerveModule(int driveMotorID, int turnMotorID, int cancoderID, double offset) {
+    driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
+    turnMotor = new CANSparkMax(turnMotorID, MotorType.kBrushless);
+    cancoder = new CANcoder(cancoderID);
+    angleOffset = offset;
+
+    // Reset motor to factory defaults
+    driveMotor.restoreFactoryDefaults();
+    turnMotor.restoreFactoryDefaults();
+  }
+
+  // Get absolute angle (in degrees)
+  public double getAngle() {
+    return (cancoder.getAbsolutePosition().getValue() * 360.0) - angleOffset;
+  }
+
+  // Set drive speed
+  public void setDriveSpeed(double speed) {
+    driveMotor.set(speed);
+  }
+
+  // Set turn motor power (for steering)
+  public void setTurnPower(double power) {
+    turnMotor.set(power);
+  }
+
+}
+
+public class SwerveDrive {
+  public final SwerveModule frontLeft;
+  public final SwerveModule frontRight;
+  public final SwerveModule backLeft;
+  public final SwerveModule backRight;
+
+  public SwerveDrive() {
+    frontLeft = new SwerveModule(1, 2, 3, 0.0);
+    frontRight = new SwerveModule(4, 5, 6, 0.0);
+    backLeft = new SwerveModule(7, 8, 9, 0.0);
+    backRight = new SwerveModule(10, 11, 12, 0.0);
+  }
+
+  public void drive(double speed, double rotation) {
+    frontLeft.setDriveSpeed(speed);
+    frontRight.setDriveSpeed(speed);
+    backLeft.setDriveSpeed(speed);
+    backRight.setDriveSpeed(speed);
+
+    // Example: Turn each module based on input (simplified)
+    frontLeft.setTurnPower(rotation);
+    frontRight.setTurnPower(rotation);
+    backLeft.setTurnPower(rotation);
+    backRight.setTurnPower(rotation);
+  }
+}
