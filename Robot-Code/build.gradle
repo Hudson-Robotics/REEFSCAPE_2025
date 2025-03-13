@@ -15,18 +15,12 @@ def ROBOT_MAIN_CLASS = "frc.robot.Main"
 deploy {
     targets {
         roborio(getTargetTypeClass('RoboRIO')) {
-            // Team number is loaded either from the .wpilib/wpilib_preferences.json
-            // or from command line. If not found an exception will be thrown.
-            // You can use getTeamOrDefault(team) instead of getTeamNumber if you
-            // want to store a team number in this file.
             team = project.frc.getTeamNumber()
             debug = project.frc.getDebugOrDefault(false)
 
             artifacts {
-                // First part is artifact name, 2nd is artifact type
-                // getTargetTypeClass is a shortcut to get the class type using a string
-
                 frcJava(getArtifactTypeClass('FRCJavaArtifact')) {
+                    // Artifact configuration
                 }
 
                 // Static files artifact
@@ -77,6 +71,10 @@ dependencies {
     implementation fileTree(dir: '../../Middleware-Code/build/libs', include: 'middleware-code-*.jar')
 
     //implementation 'com.ctre.phoenix6:Phoenix6-java:latest'
+}
+
+repositories {
+    mavenCentral()
 }
 
 test {
