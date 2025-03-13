@@ -13,6 +13,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     container: wpilib/roborio-cross-ubuntu:2024-22.04
+    container:
+      image: wpilib/roborio-cross-ubuntu:2024-22.04
 
     steps:
       - name: Checkout repository
@@ -82,7 +84,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: [self-hosted] # Use a self-hosted runner on the same network as the robot
+    runs-on: self-hosted # Use a self-hosted runner on the same network as the robot
 
     steps:
       - name: Checkout repository
