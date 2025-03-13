@@ -81,7 +81,7 @@ on:
             ${{ runner.os }}-gradle-
 
       - name: Generate and submit dependency graph
-      run: gradle/gradle-build-action@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+        run: gradle/gradle-build-action@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
       #run: gradle/actions/dependecy-submission@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
   deploy:
