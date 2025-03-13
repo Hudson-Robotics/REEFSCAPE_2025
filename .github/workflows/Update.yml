@@ -23,6 +23,6 @@ jobs:
           java-version: 17
       - name: Clone lib branch
         run: |
-          gh repo clone HeliosMoros/FRC_Reefscape_vson-Swrv/tree/FRC_Team4295Drive%26Vision -- -b 2025
-          cd YAGSL-Lib
+          gh repo clone HeliosMoros/FRC_Reefscape_vson-Swrv -- -b FRC_Team4295Drive&Vision
+          cd FRC_Reefscape_vson-Swrv
           gh workflow run update.yml -f releaseVersion=${{ inputs.releaseVersion }}

@@ -26,28 +26,12 @@ jobs:
           java-version: '17'
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+        uses: gradle/gradle-build-action@v2
         with:
           gradle-version: '7.3.3'
 
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore_keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: Grant execute permission for Gradle
-        run: chmod +x gradlew
-
-      - name: Build robot code
+      - name: Build with Gradle
         run: ./gradlew build
-
-      - name: Run WPLib Unit Tests
-        run: ./gradlew test
 
   dependency-submission:
     needs: build
