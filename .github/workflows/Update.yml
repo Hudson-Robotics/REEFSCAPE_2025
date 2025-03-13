@@ -6,23 +6,23 @@ on:
           type: string
           required: true
   
-  jobs:
-    update:
-      runs-on: ubuntu-latest
-      permissions:
-        contents: write
-        actions: write
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        releaseVersion: ${{ inputs.releaseVersion }}
-      steps:
-        - uses: actions/checkout@v4
-        - uses: actions/setup-java@v3
-          with:
-            distribution: 'temurin'
-            java-version: 17
-        - name: Clone lib branch
-          run: |
-            gh repo clone HeliosMoros/FRC_Reefscape_vson-Swrv/tree/FRC_Team4295Drive%26Vision -- -b 2025
-            cd YAGSL-Lib
-            gh workflow run update.yml -f releaseVersion=${{ inputs.releaseVersion }}
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      releaseVersion: ${{ inputs.releaseVersion }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Clone lib branch
+        run: |
+          gh repo clone HeliosMoros/FRC_Reefscape_vson-Swrv/tree/FRC_Team4295Drive%26Vision -- -b 2025
+          cd YAGSL-Lib
+          gh workflow run update.yml -f releaseVersion=${{ inputs.releaseVersion }}
