@@ -1,5 +1,3 @@
 package frc.robot.Interfaces;
 
-public class ledLights {
-
-}
+public class ledLights {}

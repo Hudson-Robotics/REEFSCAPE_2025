@@ -12,7 +12,7 @@ public interface ElevatorIO {
   }
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
-  
+
   // Sets the power to the elevator motor
   public default void setElevatorVoltage(double voltage) {}
 

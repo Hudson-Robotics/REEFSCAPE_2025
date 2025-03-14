@@ -17,68 +17,26 @@
 
 package frc.robot;
 
-// import com.pathplanner.lib.*;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import frc.robot.generated.TunerConstants;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj.PS4Controller.Button; //change to Dualsense or add dual sense
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.WristConstants;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.DriveCommands;
-import frc.robot.commands.MainCommands;
-import frc.robot.commands.AMoveEnd;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.drive.GyroIO;
-import frc.robot.subsystems.drive.ModuleIO;
-import frc.robot.subsystems.drive.ModuleIOSim;
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-import java.util.List;
-// look at vector8177_2025robot & team9181's 2025 robot
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.SparkMaxIDs;
 import frc.robot.Interfaces.Motors.MotorWithEncoder;
-import frc.robot.commands.Autos;
+import frc.robot.commands.AMoveEnd;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Led;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.helper.SparkMaxBrushlessEncoderMotor;
 import frc.robot.subsystems.helper.SwerveModule;
-import frc.robot.subsystems.Led;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.SparkMax;
-import com.revrobotics.SparkMaxBrushless;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxPIDController;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -96,33 +54,14 @@ public class RobotContainer {
   private final Climber climber;
   private final Elevator elevator;
   public final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  //private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
-
-  //private final SecurityCam camera;
-  //private final SwerveDrive drivetrain = new SwerveDrive();
   private final Led leds = new Led();
- 
+
   // Dashboard inputs
-  private final LoggedDashboardChooser<Command> autoChooser;
+  private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardChooser<>();
 
   // The driver's and operators controller
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  // Configure your button bindings here
-  //private final CommandXboxController m_driverController = 
-      //new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController driverController = new CommandXboxController(0);
   private final CommandXboxController operatorController = new CommandXboxController(1);
-  private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
-    // Resets direction to 0 degrees
-    new JoystickButton(m_drivercontroller, Button.kL1.values()
-        .whileTrue(new RunCommand(
-          () -> m_robotDrive.zeroHeading(),
-          m_robotDrive));
-
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -130,25 +69,24 @@ public class RobotContainer {
     configureBindings();
     // Configure the button bindings
     configureButtonBindings();
-    //camera = new SecurityCam();
-    
+
     autoChooser.setDefaultOption("Cross Auto Line Only", new AMoveEnd(m_robotDrive));
-    autoChooser.addOption("Do Nothing",
-      new RunCommand(
-        ()-> m_robotDrive.drive(0.0,0.0,0.0,true), m_robotDrive)
-    );
+    autoChooser.addOption(
+        "Do Nothing", new RunCommand(() -> m_robotDrive.drive(0.0, 0.0, 0.0, true), m_robotDrive));
 
     SmartDashboard.putData("Auto Choices", autoChooser);
     // Configure default commands
     m_robotDrive.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
         new RunCommand(
-            () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                true),
+            () ->
+                m_robotDrive.drive(
+                    -MathUtil.applyDeadband(
+                        driverController.getLeftY(), OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(
+                        driverController.getLeftX(), OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(
+                        driverController.getRightX(), OIConstants.kDriveDeadband),
+                    true),
             m_robotDrive));
   }
 
@@ -168,7 +106,15 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+  }
+
+  private void configureButtonBindings() {
+    new JoystickButton(driverController, Button.kR1.value)
+        .whileTrue(new RunCommand(() -> m_robotDrive.setX(), m_robotDrive));
+    // Resets direction to 0 degrees
+    new JoystickButton(driverController, Button.kL1.value)
+        .whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
 
   /**
@@ -179,166 +125,37 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return autoChooser.get();
-    return Autos.exampleAuto(m_exampleSubsystem);
-     return autoChooser.getSelected();
-    // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(DriveConstants.kDriveKinematics);
-
-    // An example trajectory to follow. All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
-        config);
-
-    var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        m_robotDrive::getPose, // Functional interface to feed supplier
-        DriveConstants.kDriveKinematics,
-
-        // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
-
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
-    */
   }
 
   private SwerveDrive createSwerveDrive() {
-    MotorWithEncoder frontLeftDrive = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_DRIVE, "FrontLeftDrive", false, 1);
-    MotorWithEncoder frontLeftSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_STEER, "FrontLeftSteer", true, 360);
+    MotorWithEncoder frontLeftDrive =
+        new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_DRIVE, "FrontLeftDrive", false, 1);
+    MotorWithEncoder frontLeftSteer =
+        new SparkMaxBrushlessEncoderMotor(
+            SparkMaxIDs.FRONT_LEFT_STEER, "FrontLeftSteer", true, 360);
     SwerveModule frontLeft = new SwerveModule(frontLeftDrive, frontLeftSteer);
 
-    MotorWithEncoder frontRightDrive = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_RIGHT_DRIVE, "frontRightDrive", false, 1);
-    MotorWithEncoder frontRightSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_RIGHT_STEER, "frontRightSteer", true, 360);
+    MotorWithEncoder frontRightDrive =
+        new SparkMaxBrushlessEncoderMotor(
+            SparkMaxIDs.FRONT_RIGHT_DRIVE, "frontRightDrive", false, 1);
+    MotorWithEncoder frontRightSteer =
+        new SparkMaxBrushlessEncoderMotor(
+            SparkMaxIDs.FRONT_RIGHT_STEER, "frontRightSteer", true, 360);
     SwerveModule frontRight = new SwerveModule(frontRightDrive, frontRightSteer);
 
-    MotorWithEncoder backLeftDrive = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_LEFT_DRIVE, "backLeftDrive", false, 1);
-    MotorWithEncoder backLeftSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_LEFT_STEER, "backLeftSteer", true, 360);
+    MotorWithEncoder backLeftDrive =
+        new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_LEFT_DRIVE, "backLeftDrive", false, 1);
+    MotorWithEncoder backLeftSteer =
+        new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_LEFT_STEER, "backLeftSteer", true, 360);
     SwerveModule backLeft = new SwerveModule(backLeftDrive, backLeftSteer);
 
-    MotorWithEncoder backRightDrive = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_DRIVE, "backRightDrive", false, 1);
-    MotorWithEncoder backRightSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_STEER, "backRightSteer", true, 360);
+    MotorWithEncoder backRightDrive =
+        new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_RIGHT_DRIVE, "backRightDrive", false, 1);
+    MotorWithEncoder backRightSteer =
+        new SparkMaxBrushlessEncoderMotor(
+            SparkMaxIDs.BACK_RIGHT_STEER, "backRightSteer", true, 360);
     SwerveModule backRight = new SwerveModule(backRightDrive, backRightSteer);
 
     return new SwerveDrive(frontLeft, frontRight, backLeft, backRight);
   }
-}
-
-public class DriveSubsystem {
-  // Create a spark MAX motor controller for the NEO
-  private static final CANSparkMax driveMotor = new CANSparkMax(1, MotorType.kBrushless);
-  // Get the motor's PID controller
-  private static final SparkMaxPIDController pidController = driveMotor.getPIDController();
-  // Get the external CANcoder
-  private static final CANcoder cancoder = new CANcoder(2);
-  // Create a PID controller for the NEO
-  //private static final PIDController drivePID = new PIDController(0.1, 0.0, 0.0);
-  // Create a PID controller for the NEO
-  //private static final PIDController turnPID = new PIDController(0.1, 0.0, 0.0);
-  public DriveSubsystem() {
-    // Restore default settings
-    driveMotor.restoreFactoryDefaults();
-    // Set the NEO to brake mode
-    //driveMotor.setIdleMode(IdleMode.kBrake);
-    // Configure CANcoder (Optional: Set absolute reference, sensor direction, etc)
-    CANcoderConfiguration cancoderConfig = new CANcoderConfiguration();
-    cancoder.getConfigurator().apply(cancoderConfig);
-    // Set motor inversion if needed
-    driveMotor.setInverted(false);
-    // Set the NEO to follow the encoder
-    //driveMotor.follow(driveEncoder);
-    // Set the NEO to follow the encoder
-    //driveMotor.follow(driveEncoder);
-    // Configure the PID values (example values, tune these for your robot)
-    pidController.setP(0.1);
-    pidController.setI(0.0);
-    pidController.setD(0.0);
-    pidController.setFF(0.0);
-    // Set the conversion factor (optional, see below)
-    //driveEncoder.setPositionConversionFactor(1.0); // Adjust based on wheel size and gearing
-    //driveEncoder.setVelocityConversionFactor(1.0); // Adjust based on RPM scaling
-  }
-  // Method to get the encoder position
-  //public double getEncoderPosition() {
-    //return driveEncoder.getPosition();
- // }
-  // Method to get the encoder velocity
-  //public double getEncoderVelocity() {
-    //return driveEncoder.getVelocity();
-  //}
-  // Reset encoder position
-  //public void resetEncoder() {
-    //driveEncoder.setPosition(0);
-  //}
-
-  // Get CANcoder absolute position (in rotations)
-  public double getAbsolutePosition(){
-    return cancoder.getAbsolutePosition().getValue();
-  }
-  // Get CANcoder relative position (in rotations)
-  public double getRelativePosition(){
-    return cancoder.getPosition().getValue();
-  }
-  // Get CANcoder velocity (in RPM)
-  public double getVelocity(){
-    return cancoder.getVelocity().getValue();
-  }
-  // Reset CANcoder position (relative mode only)
-  public void resetEncoder(){
-    cancoder.setPosition(0);
-  }
-
-  double wheelDiameter = 6.0; // Wheel diameter in inches
-  double gearRatio = 10.0; // Gear ratio (adjust for your robot)
-  // Circumference of wheel (in inches)
-  double wheelCircumference = Math.PI * wheelDiameter;
-  // Conversion factor: rotations -> inches
-  double positionFactor = wheelCircumference / gearRatio;
-  double velocityFactor = positionFactor / 60.0 // convert RPM to inches/sec
-  // Convert CANcoder readings
-  double positionInInches = getRelativePosition() * positionFactor;
-  double velocityInInchesPerSec = getVelocity() * velocityFactor;
-
-  double absolutePos = getAbsolutePosition();
-  double relativePos = getRelativePosition();
-  double velocity = getVelocity();
-
-  System.out.println("Absolute Position: " + absolutePos + " rotations");
-  System.out.println("Relative Position: " + relativePos + " rotations");
-  System.out.println("Velocity: " + velocity + " RPM");
-
-  resetEncoder();
-  System.out.println("Encoder reset. New position: " + getRelativePosition());
-
-  pidController.setFeedbackDevice(cancoder);
-  // Apply conversion Factors
-  //driveEncoder.setPositionConversionFactor(positionFactor);
-  //driveEncoder.setVelocityConversionFactor(velocityFactor);
-
-  //double position = getEncoderPosition(); // Get position in inches
-  //double velocity = getEncoderVelocity(); // Get velocity in inches/sec
-  //System.out.println("Position: " + position + " inches");
-  //System.out.println("Velocity: " + velocity + " inches/sec");
-
-  //resetEncoder();
-  //System.out.prontln("Encoder reset. New position: " + getEncoderPosition());
 }

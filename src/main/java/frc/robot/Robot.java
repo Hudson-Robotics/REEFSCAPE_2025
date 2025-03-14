@@ -4,26 +4,20 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.swerve.SwerveModuleConstants;
+import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
+import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.generated.TunerConstants;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.littletonrobotics.junction.LogFileUtil;
-import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
-import com.ctre.phoenix6.swerve.SwerveModuleConstants;
-import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
-import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxPIDController;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -32,22 +26,21 @@ import com.revrobotics.SparkMaxPIDController;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  private RobotContainer robotContainer;
+  private RobotContainer m_robotContainer;
 
   private Timer matchTimer;
-  private int matchTimerRemaining;
-
-  private final RobotContainer m_robotContainer;
+  private int matchTimeRemaining;
 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
   public Robot() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+    // Instantiate our RobotContainer. This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-     matchTimer = new Timer();
+    matchTimer = new Timer();
     matchTimeRemaining = 150;
+
     // Record metadata
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -56,10 +49,10 @@ public class Robot extends TimedRobot {
     Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
     switch (BuildConstants.DIRTY) {
       case 0:
-              Logger.recordMetadata("GitDirty", "All changes committed");
+        Logger.recordMetadata("GitDirty", "All changes committed");
         break;
       case 1:
-        Logger.recordMetadata("GitDirty", "Uncomitted changes");
+        Logger.recordMetadata("GitDirty", "Uncommitted changes");
         break;
       default:
         Logger.recordMetadata("GitDirty", "Unknown");
@@ -109,8 +102,6 @@ public class Robot extends TimedRobot {
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
-    //robotContainer = new RobotContainer();
-
     m_robotContainer = new RobotContainer();
   }
 
@@ -123,15 +114,15 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-     // Switch thread to high priority to improve loop timing
+    // Switch thread to high priority to improve loop timing
     Threads.setCurrentThreadPriority(true, 99);
 
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
+    // Runs the Scheduler. This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
+    // and running subsystem periodic() methods. This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    
+
     // Return to normal thread priority
     Threads.setCurrentThreadPriority(false, 10);
 
@@ -145,7 +136,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+    // Instantiate our RobotContainer. This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
   }
@@ -153,7 +144,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-      matchTimer.stop(); // Stop the timer when the robot is disabled
+    matchTimer.stop(); // Stop the timer when the robot is disabled
   }
 
   @Override
@@ -166,7 +157,7 @@ public class Robot extends TimedRobot {
     matchTimer.reset(); // Reset the timer when the match starts
     matchTimer.start(); // Start the timer
 
-    // schedule the autonomous command (example)
+    // Schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
@@ -181,7 +172,6 @@ public class Robot extends TimedRobot {
     // Log match time to Shuffleboard
     Logger.recordOutput("Match Timer", matchTimeRemaining);
     SmartDashboard.putNumber("Match Timer", matchTimeRemaining);
-  }
   }
 
   @Override
@@ -203,7 +193,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // Calculate remaining match time
     matchTimeRemaining = 150 - (int) matchTimer.get(); // Assuming a 150-second match duration
-    
+
     // Log match time to Shuffleboard
     Logger.recordOutput("Match Timer", matchTimeRemaining);
     SmartDashboard.putNumber("Match Timer", matchTimeRemaining);

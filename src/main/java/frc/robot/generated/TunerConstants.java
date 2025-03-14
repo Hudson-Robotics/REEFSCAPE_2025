@@ -176,7 +176,7 @@ public class TunerConstants {
   private static final Distance kBackRightXPos = Inches.of(-12.5);
   private static final Distance kBackRightYPos = Inches.of(-12.5);
 
- // change names for veriables
+  // change names for veriables
   public static final SwerveModuleConstants<
           TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
       FrontLeft =

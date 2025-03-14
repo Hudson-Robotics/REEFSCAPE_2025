@@ -1,39 +1,37 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Interfaces.Motors.Motor;
 import frc.robot.Interfaces.swivel;
 
-import edu.wpi.first.wpilibj.XboxController;
+public class swivelL extends SubsystemBase implements swivel {
+  final Motor swivelMotor;
+  private XboxController controller;
 
-import frc.robot.Interfaces.Motors.Motor;
+  public swivelL(XboxController controller, Motor swivelMotor) {
+    this.controller = controller;
+    this.swivelMotor = swivelMotor;
+  }
 
-public class swivelL extends SubsystemBase implements swivel{
-    final Motor swivelMotor;
-    private XboxController controller;
+  @Override
+  public void periodic() {
+    double speedX = this.controller.getLeftX();
+    this.swivelMotor.setSpeed(speedX);
+  }
 
-    public swivelL(XboxController controller, Motor  swivelMotor) {
-        this.controller = controller;
-        this.swivelMotor = swivelMotor;
-    }
+  @Override
+  public void up() {
+    this.swivelMotor.setSpeed(.05);
+  }
 
-    @Override
-    public void periodic() {
-        double speedX = this.controller.getLeftX();
-        this.swivelMotor.setSpeed(speedX);
-    }
+  @Override
+  public void down() {
+    this.swivelMotor.setSpeed(-.05);
+  }
 
-    @Override
-    public void up() {
-        this.swivelMotor.setSpeed(.05);
-    }
-
-    @Override
-    public void down() {
-        this.swivelMotor.setSpeed(-.05);
-    }
-
-    @Override
-    public void stop() {
-        this.swivelMotor.setSpeed(0);
-    }
+  @Override
+  public void stop() {
+    this.swivelMotor.setSpeed(0);
+  }
 }

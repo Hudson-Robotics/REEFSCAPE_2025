@@ -1,4 +1,4 @@
-ackage frc.robot.subsystems.wrist;
+package frc.robot.subsystems.wrist;
 
 import org.littletonrobotics.junction.AutoLog;
 

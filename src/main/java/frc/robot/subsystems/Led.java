@@ -4,14 +4,14 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 public class Led extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   Spark ledLights = new Spark(2);
+
   public Led() {}
 
   /**
