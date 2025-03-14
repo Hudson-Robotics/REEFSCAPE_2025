@@ -212,4 +212,9 @@ Command driveFieldOrientedDirectAngle      = driveBase.driveFieldOriented(driveD
     Motor motor2 = new TalonFXMotor(41, "motor 2");
     return new Intake(motor1, motor2);
   }
+
+  public void setMotorBrake(boolean brake)
+  {
+    driveBase.setMotorBrake(brake);
+  }
 }

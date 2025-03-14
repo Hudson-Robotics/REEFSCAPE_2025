@@ -51,4 +51,11 @@ public final class Constants {
     
     //public static final int SWIVEL_MOTOR_UP = 15;
 }
+
+public static final class DrivebaseConstants
+{
+
+  // Hold time on motor brakes when disabled
+  public static final double WHEEL_LOCK_TIME = 10; // seconds
+}
 }
