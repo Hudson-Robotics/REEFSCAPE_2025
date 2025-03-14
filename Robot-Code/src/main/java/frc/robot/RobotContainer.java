@@ -9,10 +9,8 @@ import frc.robot.Constants.SparkMaxIDs;
 import frc.robot.Interfaces.Motors.Motor;
 import frc.robot.Interfaces.Motors.MotorWithEncoder;
 import frc.robot.commands.Autos;
-import frc.robot.commands.DriveStraight;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.swivelL;
 import frc.robot.subsystems.helper.SparkMaxBrushlessEncoderMotor;
 import frc.robot.subsystems.helper.SparkMaxBrushlessMotor;
@@ -39,7 +37,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 //Driver 0 = Drive
 //Driver 1 = Manipulators
- private final SwerveDrive drivetrain = this.createSwerveDrive();
+
  //private final swivelL swivel = new swivelL(new XboxController(0), new TalonFXMotorWithEncoder(12, "Swivel")); // need to move canBusId to constants and remove the xboxController from the swivel class
  private final Led leds = new Led();
  //private final Intake intake = createIntake();
@@ -73,35 +71,16 @@ public class RobotContainer {
     //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return new DriveStraight(drivetrain);
-  }
+  // /**
+  //  * Use this to pass the autonomous command to the main {@link Robot} class.
+  //  *
+  //  * @return the command to run in autonomous
+  //  */
+  // public Command getAutonomousCommand() {
+  //   // An example command will be run in autonomous
 
-  private SwerveDrive createSwerveDrive() {
-    Motor frontLeftDrive = new SparkMaxBrushlessMotor(SparkMaxIDs.FRONT_LEFT_DRIVE, "FrontLeftDrive");
-    MotorWithEncoder frontLeftSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_LEFT_STEER, "FrontLeftSteer", 24);
-    SwerveModule frontLeft = new SwerveModule(frontLeftDrive, frontLeftSteer);
+  // }
 
-    Motor frontRightDrive = new SparkMaxBrushlessMotor(SparkMaxIDs.FRONT_RIGHT_DRIVE, "frontRightDrive");
-    MotorWithEncoder frontRightSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.FRONT_RIGHT_STEER, "frontRightSteer", 22);
-    SwerveModule frontRight = new SwerveModule(frontRightDrive, frontRightSteer);
-
-    Motor backLeftDrive = new SparkMaxBrushlessMotor(SparkMaxIDs.BACK_LEFT_DRIVE, "backLeftDrive");
-    MotorWithEncoder backLeftSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_LEFT_STEER, "backLeftSteer", 21);
-    SwerveModule backLeft = new SwerveModule(backLeftDrive, backLeftSteer);
-
-    Motor backRightDrive = new SparkMaxBrushlessMotor(SparkMaxIDs.BACK_RIGHT_DRIVE, "backRightDrive");
-    MotorWithEncoder backRightSteer = new SparkMaxBrushlessEncoderMotor(SparkMaxIDs.BACK_RIGHT_STEER, "backRightSteer", 23);
-    SwerveModule backRight = new SwerveModule(backRightDrive, backRightSteer);
-
-    return new SwerveDrive(frontLeft, frontRight, backLeft, backRight);
-  }
 
   private Intake createIntake() {
     Motor motor1 = new TalonFXMotor(29, "motor 1");
