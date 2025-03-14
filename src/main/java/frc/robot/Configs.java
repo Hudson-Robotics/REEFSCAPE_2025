@@ -6,7 +6,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.ModuleConstants;
 
-public final class Configs {
+public class Configs {
     public static final class MAXSwerveModule {
         public static final SparkMaxConfig drivingConfig = new SparkMaxConfig();
         public static final SparkMaxConfig turningConfig = new SparkMaxConfig();
@@ -53,4 +53,11 @@ public final class Configs {
                     .positionWrappingInputRange(0, turningFactor);
         }
     }
+
+    // Example usage of ModuleConstants
+    public void printModuleConstants() {
+        System.out.println(ModuleConstants.SOME_CONSTANT);
+    }
+
+    // Add other methods and fields as needed
 }
