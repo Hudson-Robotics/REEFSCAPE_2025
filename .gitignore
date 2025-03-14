@@ -186,5 +186,58 @@ compile_commands.json
 # Eclipse generated file for annotation processors
 .factorypath
 
-# Version file
-src/main/java/frc/robot/BuildConstants.java
+# Build output directories
+out/
+bin/
+
+# Fleet
+.fleet
+
+# Simulation GUI and other tools window save file
+networktables.json
+simgui.json
+*-window.json
+
+# Simulation data log directory
+logs/
+
+# Folder that has CTRE Phoenix Sim device config storage
+ctre_sim/
+
+# clangd
+/.cache
+compile_commands.json
+
+# Eclipse generated file for annotation processors
+.factorypath
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# VS Code
+.vscode/
+
+# Gradle
+.gradle/
+build/
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+Thumbs.db
