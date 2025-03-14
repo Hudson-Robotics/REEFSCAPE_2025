@@ -18,20 +18,20 @@ public final class Autos {
     }
 
     public static Command moveEndAuto(DriveSubsystem drive) {
-        return new MoveEndCommand(drive);
+        return new AMoveEnd(drive);
     }
 
     private Autos() {
-        // Prevent instantiation
+        throw new UnsupportedOperationException("This is a utility class!");
     }
 
-    public static class MoveEndCommand extends CommandBase {
+    public static class AMoveEnd extends CommandBase {
 
-        private final DriveSubsystem drive;
+        private final DriveSubsystem _drive;
         private double startTime;
 
-        public MoveEndCommand(DriveSubsystem drive) {
-            this.drive = drive;
+        public AMoveEnd(DriveSubsystem drive) {
+            _drive = drive;
             // Use addRequirements() here to declare subsystem dependencies.
             addRequirements(drive);
         }
@@ -45,13 +45,13 @@ public final class Autos {
         // Called every time the scheduler runs while the command is scheduled.
         @Override
         public void execute() {
-            drive.drive(0.5, 0.0, 0.0, true);
+            //_drive.drive(0.5, 0.0, 0.0, true);
         }
 
         // Called once the command ends or is interrupted.
         @Override
         public void end(boolean interrupted) {
-            drive.setX();
+            //_drive.setX();
         }
 
         // Returns true when the command should end.
