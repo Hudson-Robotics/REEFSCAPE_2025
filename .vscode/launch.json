@@ -4,11 +4,18 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-    { // can be possibly commented out
+    {
       "type": "java",
       "name": "Main",
       "request": "launch",
-      "mainClass": "frc.robot.Main", // "frc.robot.subsyetms.vision.test"''
+      "mainClass": "Main",
+      "projectName": "FRC_Reefscape_vson-Swrv_f5f68063"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "frc.robot.Main",
       "projectName": "Robot-Code"
     },
     {
