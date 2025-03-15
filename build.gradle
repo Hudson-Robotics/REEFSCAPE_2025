@@ -7,8 +7,13 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    // sourceCompatibility = JavaVersion.VERSION_17
+    // targetCompatibility = JavaVersion.VERSION_17
+
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+        // vendor = JvmVendorSpec.ADOPTIUM // You can also use other vendors if necessary.
+    }
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
@@ -255,7 +260,7 @@ spotless {
     format "misc", {
         target fileTree(".") {
             include "**/*.md", "**/.gitignore"
-            exclude "**/build/**", "**/build-*/**"
+            exclude "**/build/**"
         }
         trimTrailingWhitespace()
         indentWithSpaces(2)
@@ -267,6 +272,7 @@ spotless {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
+        vendor = JvmVendorSpec.ADOPTIUM // You can also use other vendors if necessary.
     }
 }
 
