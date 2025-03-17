@@ -12,7 +12,7 @@ java {
 
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
-        // vendor = JvmVendorSpec.ADOPTIUM // You can also use other vendors if necessary.
+        vendor = JvmVendorSpec.ADOPTIUM // You can also use other vendors if necessary.
     }
 }
 
@@ -84,6 +84,10 @@ repositories {
         }
     }
     mavenLocal()
+    // Add AdoptOpenJDK repository
+    maven {
+        url = uri("https://adoptopenjdk.jfrog.io/adoptopenjdk/maven/")
+    }
 }
 
 configurations.all {
