@@ -5,31 +5,18 @@ import frc.robot.Interfaces.swivel;
 
 import edu.wpi.first.wpilibj.XboxController;
 
-import frc.robot.Interfaces.Motors.Motor;
 import frc.robot.Interfaces.Motors.MotorWithEncoder;
 
 public class swivelL extends SubsystemBase implements swivel{
     final MotorWithEncoder swivelMotor;
-    private XboxController controller;
 
-    public swivelL(XboxController controller, MotorWithEncoder  swivelMotor) {
-        this.controller = controller;
+    public swivelL(MotorWithEncoder  swivelMotor) {
         this.swivelMotor = swivelMotor;
         this.swivelMotor.enableBrake();
     }
 
     @Override
     public void periodic() {
-        double speedX = this.controller.getLeftX();
-        double threshold = .04;
-        speedX = Math.abs(speedX) < threshold ? 0.0 : speedX;
-        if(speedX == 0.0)
-        {
-            //this.swivelMotor.holdPosition(); // this needs to be fixed but a different branch problem
-        } else {
-            this.swivelMotor.setSpeed(speedX * .1); // wanna scale it down for safety
-            this.swivelMotor.printToSmartDashboard();
-        }
         this.swivelMotor.printToSmartDashboard();
     }
 
@@ -46,6 +33,11 @@ public class swivelL extends SubsystemBase implements swivel{
     @Override
     public void stop() {
         this.swivelMotor.setSpeed(0);
+    }
+
+    @Override
+    public void setSpeed(double speed) {
+        this.swivelMotor.setSpeed(speed);
     }
 
     @Override

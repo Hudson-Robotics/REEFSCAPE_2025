@@ -11,6 +11,7 @@ import frc.robot.Interfaces.Motors.MotorWithEncoder;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Intake.IntakeCoral;
+import frc.robot.commands.Swivel.SwivelJoy;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.swivelL;
 import frc.robot.subsystems.helper.SparkMaxBrushlessEncoderMotor;
@@ -110,7 +111,7 @@ SwerveInputStream driveAngularVelocity = SwerveInputStream.of(driveBase.getSwerv
                                                                                .translationHeadingOffset(Rotation2d.fromDegrees(
                                                                                    0));
 
- //private final swivelL swivel = new swivelL(new XboxController(0), new TalonFXMotorWithEncoder(12, "Swivel")); // need to move canBusId to constants and remove the xboxController from the swivel class
+ private final swivelL swivel = new swivelL(new TalonFXMotorWithEncoder(12, "Swivel")); // need to move canBusId to constants and remove the xboxController from the swivel class
  private final Led leds = new Led();
  private final Intake intake = createIntake();
 
@@ -220,6 +221,7 @@ Command driveFieldOrientedDirectAngle      = driveBase.driveFieldOriented(driveD
 
   private void mapControllers() {
     this.intake.setDefaultCommand(new IntakeCoral(intake, () -> manipulatorXbox.getLeftTriggerAxis() - manipulatorXbox.getRightTriggerAxis()));
+    this.swivel.setDefaultCommand(new SwivelJoy(swivel, () -> manipulatorXbox.getRightX()));
   }
 
   public void setMotorBrake(boolean brake)
