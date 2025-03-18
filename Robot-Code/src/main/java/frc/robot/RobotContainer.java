@@ -221,7 +221,13 @@ Command driveFieldOrientedDirectAngle      = driveBase.driveFieldOriented(driveD
 
   private void mapControllers() {
     this.intake.setDefaultCommand(new IntakeCoral(intake, () -> manipulatorXbox.getLeftTriggerAxis() - manipulatorXbox.getRightTriggerAxis()));
-    this.swivel.setDefaultCommand(new SwivelJoy(swivel, () -> manipulatorXbox.getRightX()));
+    this.swivel.setDefaultCommand(new SwivelJoy(swivel, () -> manipulatorXbox.getLeftY()));
+    // look at the previous two commits for intake and swivel
+    // add a command for elevator and then
+    // come here and add a default command for elevator
+    // the code should look something like this
+    // this.elevator.setDefaultCommand(new ElevatorRise(elevator, () -> manipulator.getRightY()));
+    // just dont uncomment this code ^^^^ it wont work
   }
 
   public void setMotorBrake(boolean brake)
