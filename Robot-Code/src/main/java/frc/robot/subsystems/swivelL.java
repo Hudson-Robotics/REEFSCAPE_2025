@@ -25,7 +25,7 @@ public class swivelL extends SubsystemBase implements swivel{
         speedX = Math.abs(speedX) < threshold ? 0.0 : speedX;
         if(speedX == 0.0)
         {
-            this.swivelMotor.holdPosition();
+            //this.swivelMotor.holdPosition(); // this needs to be fixed but a different branch problem
         } else {
             this.swivelMotor.setSpeed(speedX * .1); // wanna scale it down for safety
             this.swivelMotor.printToSmartDashboard();
