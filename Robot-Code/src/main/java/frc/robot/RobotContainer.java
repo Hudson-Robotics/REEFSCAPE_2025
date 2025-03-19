@@ -201,10 +201,10 @@ Command driveFieldOrientedDirectAngle      = driveBase.driveFieldOriented(driveD
   //  *
   //  * @return the command to run in autonomous
   //  */
-  // public Command getAutonomousCommand() {
-  //   // An example command will be run in autonomous
-
-  // }
+  public Command getAutonomousCommand() {
+    // An example command will be run in autonomous
+    return driveBase.getAutonomousCommand("New Auto");
+  }
 
 
   private Intake createIntake() {
