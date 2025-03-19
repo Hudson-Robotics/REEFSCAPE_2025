@@ -30,8 +30,8 @@ public class Intake extends SubsystemBase implements interIntake {
     }
     @Override
     public void setSpeed(double speed) {
-        this.intakeMotor1.setSpeed(-speed);
-        this.intakeMotor2.setSpeed(speed);
+        this.intakeMotor1.setSpeed(-speed*.5);
+        this.intakeMotor2.setSpeed(speed*.5);
     }
     @Override
     public boolean hasCoral() {

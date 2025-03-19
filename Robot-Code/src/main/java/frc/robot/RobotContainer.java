@@ -12,6 +12,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Intake.IntakeCoral;
 import frc.robot.commands.Swivel.SwivelJoy;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.swivelL;
 import frc.robot.subsystems.helper.SparkMaxBrushlessEncoderMotor;
@@ -114,6 +115,7 @@ SwerveInputStream driveAngularVelocity = SwerveInputStream.of(driveBase.getSwerv
  private final swivelL swivel = new swivelL(new TalonFXMotorWithEncoder(12, "Swivel")); // need to move canBusId to constants and remove the xboxController from the swivel class
  private final Led leds = new Led();
  private final Intake intake = createIntake();
+ private final Elevator elevator = new Elevator(null, new SparkMaxBrushlessMotor(16, "left motor"), new SparkMaxBrushlessMotor(11, "right"));
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   // private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);

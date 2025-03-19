@@ -41,12 +41,12 @@ public class Elevator extends SubsystemBase implements interElevator{
     //the elevators are mirrored so they might have to be inverted
     @Override
     public void raise() {
-        this.setSpeed(.2);
+        this.setSpeed(.1);
     }
 
     @Override
     public void drop() {
-        this.setSpeed(-.2);
+        this.setSpeed(-.1);
     }
 
     @Override

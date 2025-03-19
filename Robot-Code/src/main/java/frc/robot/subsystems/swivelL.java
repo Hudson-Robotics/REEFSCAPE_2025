@@ -37,7 +37,7 @@ public class swivelL extends SubsystemBase implements swivel{
 
     @Override
     public void setSpeed(double speed) {
-        this.swivelMotor.setSpeed(speed);
+        this.swivelMotor.setSpeed(speed * .2);
     }
 
     @Override

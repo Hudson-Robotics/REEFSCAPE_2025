@@ -1,5 +1,6 @@
 package frc.robot.subsystems.helper;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Interfaces.Motors.MotorWithEncoder;
 
 public class TalonFXMotorWithEncoder extends TalonFXMotor implements MotorWithEncoder{
@@ -32,6 +33,11 @@ public class TalonFXMotorWithEncoder extends TalonFXMotor implements MotorWithEn
     @Override
     public void setPosition(double position) {
         this.motor.setPosition(0);
+    }
+
+    @Override
+    public void printToSmartDashboard() {
+        SmartDashboard.putNumber("Encoder " + this.getName(), getPosition());
     }
 
 }
