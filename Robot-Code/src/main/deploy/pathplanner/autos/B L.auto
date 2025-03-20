@@ -5,9 +5,21 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "LowerArm"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Blue Straight Spin"
+            "pathName": "Blue Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]
