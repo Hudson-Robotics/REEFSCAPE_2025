@@ -5,4 +5,5 @@ public interface swivel {
     void down();
     void stop();
     void setAngle(double angle);
+    void setSpeed(double speed);
 }

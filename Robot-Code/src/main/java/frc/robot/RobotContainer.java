@@ -10,6 +10,10 @@ import frc.robot.Interfaces.Motors.Motor;
 import frc.robot.Interfaces.Motors.MotorWithEncoder;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.Elevator.RaiseElevator;
+import frc.robot.commands.Intake.IntakeCoral;
+import frc.robot.commands.Swivel.SwivelJoy;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.swivelL;
 import frc.robot.subsystems.helper.SparkMaxBrushlessEncoderMotor;
@@ -36,6 +40,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -52,6 +57,8 @@ public class RobotContainer {
 //Driver 0 = Drive
 //Driver 1 = Manipulators
 final CommandXboxController driverXbox = new CommandXboxController(0);
+final CommandXboxController manipulatorXbox = new CommandXboxController(1);
+
 private final SwerveSubsystem driveBase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve/neo")); //instead of reading file might be better to create it via code
 /**
  * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -106,9 +113,10 @@ SwerveInputStream driveAngularVelocity = SwerveInputStream.of(driveBase.getSwerv
                                                                                .translationHeadingOffset(Rotation2d.fromDegrees(
                                                                                    0));
 
- //private final swivelL swivel = new swivelL(new XboxController(0), new TalonFXMotorWithEncoder(12, "Swivel")); // need to move canBusId to constants and remove the xboxController from the swivel class
+ private final swivelL swivel = new swivelL(new TalonFXMotorWithEncoder(12, "Swivel")); // need to move canBusId to constants and remove the xboxController from the swivel class
  private final Led leds = new Led();
- //private final Intake intake = createIntake();
+ private final Intake intake = createIntake();
+ private final Elevator elevator = createElevator();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   // private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -118,6 +126,7 @@ SwerveInputStream driveAngularVelocity = SwerveInputStream.of(driveBase.getSwerv
     // Configure the trigger bindings
     configureBindings();
     //camera = new SecurityCam();
+    this.mapControllers();
   }
 
   /**
@@ -211,6 +220,20 @@ Command driveFieldOrientedDirectAngle      = driveBase.driveFieldOriented(driveD
     Motor motor1 = new TalonFXMotor(29, "motor 1");
     Motor motor2 = new TalonFXMotor(41, "motor 2");
     return new Intake(motor1, motor2);
+  }
+
+  private Elevator createElevator() {
+    //private final Elevator elevator = new Elevator(null, new SparkMaxBrushlessMotor(16, "left motor"), new SparkMaxBrushlessMotor(11, "right"));
+    Motor leftMotor = new SparkMaxBrushlessMotor(16, "Elevator Left");
+    Motor rightMotor = new SparkMaxBrushlessMotor(11, "Elevator Right");
+
+    return new Elevator(leftMotor, rightMotor);
+  }
+
+  private void mapControllers() {
+    this.intake.setDefaultCommand(new IntakeCoral(intake, () -> manipulatorXbox.getLeftTriggerAxis() - manipulatorXbox.getRightTriggerAxis()));
+    this.swivel.setDefaultCommand(new SwivelJoy(swivel, () -> manipulatorXbox.getLeftY()));
+    this.elevator.setDefaultCommand(new RaiseElevator(elevator, () -> manipulatorXbox.getRightY()));
   }
 
   public void setMotorBrake(boolean brake)
