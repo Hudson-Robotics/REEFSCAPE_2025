@@ -12,6 +12,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Elevator.RaiseElevator;
 import frc.robot.commands.Intake.IntakeCoral;
+import frc.robot.commands.Swivel.LowerToL1;
 import frc.robot.commands.Swivel.SwivelJoy;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -29,6 +30,8 @@ import frc.robot.subsystems.Intake;
 import java.io.File;
 
 import javax.naming.InitialContext;
+
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -123,6 +126,8 @@ SwerveInputStream driveAngularVelocity = SwerveInputStream.of(driveBase.getSwerv
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    NamedCommands.registerCommand("LowerArm", new LowerToL1(swivel));
+    NamedCommands.registerCommand("Shoot", getAutonomousCommand());
     // Configure the trigger bindings
     configureBindings();
     //camera = new SecurityCam();
@@ -212,7 +217,7 @@ Command driveFieldOrientedDirectAngle      = driveBase.driveFieldOriented(driveD
   //  */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return driveBase.getAutonomousCommand("New Auto");
+    return driveBase.getAutonomousCommand("B L"); // Add a way to get Alliance Color + Driver Input
   }
 
 

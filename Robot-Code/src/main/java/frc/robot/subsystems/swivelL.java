@@ -37,11 +37,25 @@ public class swivelL extends SubsystemBase implements swivel{
 
     @Override
     public void setSpeed(double speed) {
-        this.swivelMotor.setSpeed(speed * .2);
+        double adjustedSpeed = speed * .3 + Math.cos(this.getRadian()) * .1;
+        this.swivelMotor.setSpeed(adjustedSpeed);
     }
 
     @Override
     public void setAngle(double angle) {
         double encoderPositition = angle; //need to converted
+    }
+
+    @Override
+    public double getAngle() {
+        return getDegree();
+    }
+
+    private double getDegree() {
+        return -21.1 * this.swivelMotor.getPosition() - 17.9;
+    }
+
+    private double getRadian() {
+        return (this.getDegree() * Math.PI) / 180;
     }
 }
