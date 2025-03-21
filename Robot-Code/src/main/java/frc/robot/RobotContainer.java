@@ -10,9 +10,13 @@ import frc.robot.Interfaces.Motors.Motor;
 import frc.robot.Interfaces.Motors.MotorWithEncoder;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.Climb.ClampCage;
+import frc.robot.commands.Climb.ClimbCage;
+import frc.robot.commands.Climb.UnclampCage;
 import frc.robot.commands.Elevator.RaiseElevator;
 import frc.robot.commands.Intake.IntakeCoral;
 import frc.robot.commands.Swivel.SwivelJoy;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.swivelL;
@@ -117,6 +121,7 @@ SwerveInputStream driveAngularVelocity = SwerveInputStream.of(driveBase.getSwerv
  private final Led leds = new Led();
  private final Intake intake = createIntake();
  private final Elevator elevator = createElevator();
+ private final Climber climber = createClimb();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   // private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -230,10 +235,21 @@ Command driveFieldOrientedDirectAngle      = driveBase.driveFieldOriented(driveD
     return new Elevator(leftMotor, rightMotor);
   }
 
+  private Climber createClimb() {
+    Motor leftMotor = new TalonFXMotor(58, "Left Climb Motor");
+    Motor righMotor = new TalonFXMotor(82, "Right Climb Motor");
+
+    return new Climber(leftMotor, righMotor);
+  }
+
   private void mapControllers() {
     this.intake.setDefaultCommand(new IntakeCoral(intake, () -> manipulatorXbox.getLeftTriggerAxis() - manipulatorXbox.getRightTriggerAxis()));
     this.swivel.setDefaultCommand(new SwivelJoy(swivel, () -> manipulatorXbox.getLeftY()));
     this.elevator.setDefaultCommand(new RaiseElevator(elevator, () -> manipulatorXbox.getRightY()));
+    
+    this.climber.setDefaultCommand(new ClimbCage(climber, () -> driverXbox.getLeftTriggerAxis() - driverXbox.getRightTriggerAxis()));
+    this.driverXbox.x().onTrue(new ClampCage(climber));
+    this.driverXbox.b().onTrue(new UnclampCage(climber));
   }
 
   public void setMotorBrake(boolean brake)
