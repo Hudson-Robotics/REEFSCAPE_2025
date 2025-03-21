@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Interfaces.swivel;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.XboxController;
 
 import frc.robot.Interfaces.Motors.MotorWithEncoder;
@@ -18,6 +20,7 @@ public class swivelL extends SubsystemBase implements swivel{
     @Override
     public void periodic() {
         this.swivelMotor.printToSmartDashboard();
+        Logger.recordOutput("Swivel", getDegree());
     }
 
     @Override

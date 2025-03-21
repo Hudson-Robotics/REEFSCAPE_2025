@@ -262,8 +262,8 @@ Command driveFieldOrientedDirectAngle      = driveBase.driveFieldOriented(driveD
 
   private Elevator createElevator() {
     //private final Elevator elevator = new Elevator(null, new SparkMaxBrushlessMotor(16, "left motor"), new SparkMaxBrushlessMotor(11, "right"));
-    Motor leftMotor = new SparkMaxBrushlessMotor(16, "Elevator Left");
-    Motor rightMotor = new SparkMaxBrushlessMotor(11, "Elevator Right");
+    MotorWithEncoder leftMotor = new SparkMaxBrushlessEncoderMotor(16, "Elevator Left", false);
+    MotorWithEncoder rightMotor = new SparkMaxBrushlessEncoderMotor(11, "Elevator Right", false);
 
     return new Elevator(leftMotor, rightMotor);
   }
