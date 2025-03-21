@@ -237,7 +237,7 @@ Command driveFieldOrientedDirectAngle      = driveBase.driveFieldOriented(driveD
 
   private Climber createClimb() {
     Motor leftMotor = new TalonFXMotor(58, "Left Climb Motor");
-    Motor righMotor = new TalonFXMotor(82, "Right Climb Motor");
+    Motor righMotor = new TalonFXMotor(3, "Right Climb Motor");
 
     return new Climber(leftMotor, righMotor);
   }
