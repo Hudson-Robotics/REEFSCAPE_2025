@@ -12,6 +12,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Elevator.RaiseElevator;
 import frc.robot.commands.Intake.IntakeCoral;
+import frc.robot.commands.Swivel.LowerToL1;
 import frc.robot.commands.Swivel.SwivelJoy;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -27,8 +28,11 @@ import frc.robot.subsystems.Led;
 import frc.robot.subsystems.Intake;
 
 import java.io.File;
+import java.util.Optional;
 
 import javax.naming.InitialContext;
+
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -40,6 +44,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -123,6 +128,8 @@ SwerveInputStream driveAngularVelocity = SwerveInputStream.of(driveBase.getSwerv
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    NamedCommands.registerCommand("LowerArm", new LowerToL1(swivel));
+    NamedCommands.registerCommand("Shoot", getAutonomousCommand());
     // Configure the trigger bindings
     configureBindings();
     //camera = new SecurityCam();
@@ -210,10 +217,41 @@ Command driveFieldOrientedDirectAngle      = driveBase.driveFieldOriented(driveD
   //  *
   //  * @return the command to run in autonomous
   //  */
-  // public Command getAutonomousCommand() {
-  //   // An example command will be run in autonomous
+  public Command getAutonomousCommand() {
+    // An example command will be run in autonomous
+    String filePath = getAllianceLetter() + " " + getGameData();
+    if(filePath.length() < 3)
+    {
+      return driveBase.driveCommand(() -> -1, () -> 0, () -> 0);
+    }
+    return driveBase.getAutonomousCommand(filePath); // Add a way to get Alliance Color + Driver Input
+  }
 
-  // }
+  private String getAllianceLetter() {
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (ally.isPresent()) {
+      if (ally.get() == Alliance.Red) {
+        return "R";
+      }
+     if (ally.get() == Alliance.Blue) {
+        return "B";
+      }
+    }
+    else {
+      return "";
+    }
+    return "";
+  }
+
+  private String getGameData(){
+    String gameData = DriverStation.getGameSpecificMessage();
+    gameData = gameData.toUpperCase();
+    if(gameData.equals("L") || gameData.equals("R") || gameData.equals("C"))
+    {
+      return gameData;
+    }
+    return "";
+  }
 
 
   private Intake createIntake() {
