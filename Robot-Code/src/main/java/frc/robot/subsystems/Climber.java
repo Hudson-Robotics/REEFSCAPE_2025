@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,21 +14,19 @@ public class Climber extends SubsystemBase implements Climb  {
  final Motor upMotor1;
  final Motor UpMotor2;
 
- private XboxController controller; 
+ final DoubleSolenoid leftSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 13);
+ final DoubleSolenoid rightSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 15);
+ boolean isItClamped = false;
+
  public Climber(Motor upMotor1, Motor upMotor2) { 
-    controller = new XboxController(2);
     this.upMotor1 = upMotor1;
     this.UpMotor2 = upMotor2;
 }
 
     @Override
      public void periodic() {
-        // Get the state of the A button (boolean)
-        boolean xButtonPressed = controller.getAButton();
-        SmartDashboard.putBoolean("X Button Pressed", xButtonPressed); 
-        if(xButtonPressed){
-            this.climb(1);
-        } 
+        this.upMotor1.printToSmartDashboard();
+        this.UpMotor2.printToSmartDashboard();
      }
 
     @Override
@@ -34,4 +34,25 @@ public class Climber extends SubsystemBase implements Climb  {
         this.upMotor1.setSpeed(speed);
         this.UpMotor2.setSpeed(speed);
     }
+
+    @Override
+    public void clamp() {
+        if(!isItClamped)
+        {
+            leftSolenoid.toggle();
+            rightSolenoid.toggle(); 
+            isItClamped = true;
+        }
+    }
+
+    @Override
+    public void unclamp() {
+        if(isItClamped) {
+            leftSolenoid.toggle();
+            rightSolenoid.toggle();
+            isItClamped = false;
+        }
+    }
+
+    
 }
